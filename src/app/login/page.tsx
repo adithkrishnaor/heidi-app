@@ -25,7 +25,7 @@ const Login = () => {
     // Add your login logic here
     // Import useRouter from Next.js
 
-    router.push("/dashboard");
+    router.push("/home");
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -148,7 +148,7 @@ const Login = () => {
       <div className="flex-1 bg-gradient-to-br from-blue-400 to-blue-600 flex flex-col items-center justify-center p-8 text-white">
         <div className="relative">
           <Image
-            src="/images/Icon.png"
+            src="/images/Logo_1.png"
             alt="Heidi AI Dashboard Illustration"
             width={200}
             height={150}
@@ -158,8 +158,8 @@ const Login = () => {
         <br />
         <div className="relative">
           <Image
-            src="/images/Logo_1.png"
-            alt="Heidi AI Dashboard Illustration"
+            src="/images/pose_2.png"
+            alt="Heidi Pose 1"
             width={400}
             height={300}
           />
