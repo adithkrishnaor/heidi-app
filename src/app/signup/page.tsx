@@ -37,14 +37,28 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left side - Branding */}
-      <div className="flex-1 bg-gradient-to-br from-blue-400 to-blue-600 flex flex-col items-center justify-center p-8 text-white">
+      <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] flex flex-col items-center justify-center p-8 text-white">
         <div className="relative">
-          <Image
-            src="/images/Logo_1.png"
-            alt="Heidi AI Dashboard Illustration"
-            width={200}
-            height={150}
-          />
+          <center>
+            <br />
+            <h1
+              className="text-3xl font-bold"
+              style={{
+                fontFamily: "Poupin, sans-serif",
+                color: "#FFE310",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <strong>Meeting's over. I've got the goods.</strong>
+              <br /> <br />
+              <span
+                className="font-normal"
+                style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)" }}
+              >
+                You? Just go be brilliant.
+              </span>
+            </h1>
+          </center>
         </div>
         <br />
         <br />
