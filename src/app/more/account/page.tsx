@@ -19,11 +19,67 @@ const AccountPage: React.FC = () => {
   const router = useRouter();
 
   const handleNavigation = (page: string) => {
-    setCurrentPage(page);
-    if (page === "account") {
-      router.push("/more/account");
-    } else {
-      router.push(`/${page}`);
+    switch (page) {
+      case "home":
+        setCurrentPage("home");
+        router.push("/home");
+        break;
+      case "account":
+        setCurrentPage("account");
+        router.push("/more/account");
+        break;
+      case "contacts":
+        setCurrentPage("contacts");
+        router.push("/more/contacts");
+        break;
+      case "billing":
+        setCurrentPage("billing");
+        router.push("/more/billing");
+        break;
+      case "preferences":
+        setCurrentPage("preferences");
+        router.push("/more/preferences");
+        break;
+      case "integrations":
+        setCurrentPage("integrations");
+        router.push("/more/integrations");
+        break;
+      case "team & roles":
+        setCurrentPage("team & roles");
+        router.push("/more/team-roles");
+        break;
+      case "faqs":
+        setCurrentPage("faqs");
+        router.push("/more/faqs");
+        break;
+      case "support chat":
+        setCurrentPage("support chat");
+        router.push("/more/support");
+        break;
+      case "logout":
+        // Handle logout logic
+        console.log("Logging out...");
+        break;
+      case "meetings":
+        setCurrentPage("meetings");
+        router.push("/meetings");
+        break;
+      case "calendar":
+        setCurrentPage("calendar");
+        router.push("/calendar");
+        break;
+      case "ai":
+        setCurrentPage("ai");
+        router.push("/ai");
+        break;
+      case "more":
+        // When "More" is clicked, go to account and set currentPage to account
+        setCurrentPage("account");
+        router.push("/more/account");
+        break;
+      default:
+        setCurrentPage(page);
+        router.push(`/${page}`);
     }
   };
 
@@ -50,36 +106,30 @@ const AccountPage: React.FC = () => {
           <div className="col-span-3">
             <div className="bg-blue-600 rounded-2xl overflow-hidden">
               <div className="space-y-0">
-                <div className="bg-blue-500 px-6 py-4">
-                  <h3 className="text-white font-semibold">Home</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">Account</h3>
-                </div>
-                <div className="bg-blue-500 px-6 py-4">
-                  <h3 className="text-white font-semibold">Contacts</h3>
-                </div>
-                <div className="bg-blue-500 px-6 py-4">
-                  <h3 className="text-white font-semibold">Billing</h3>
-                </div>
-                <div className="bg-blue-500 px-6 py-4">
-                  <h3 className="text-white font-semibold">Preferences</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">Integrations</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">Team & Roles</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">FAQs</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">Support Chat</h3>
-                </div>
-                <div className="px-6 py-4 text-white hover:bg-blue-500 cursor-pointer transition-colors">
-                  <h3 className="font-semibold">Logout</h3>
-                </div>
+                {[
+                  { name: "Home", key: "home", active: false },
+                  { name: "Account", key: "account", active: true },
+                  { name: "Contacts", key: "contacts", active: false },
+                  { name: "Billing", key: "billing", active: false },
+                  { name: "Preferences", key: "preferences", active: false },
+                  { name: "Integrations", key: "integrations", active: false },
+                  { name: "Team & Roles", key: "team & roles", active: false },
+                  { name: "FAQs", key: "faqs", active: false },
+                  { name: "Support Chat", key: "support chat", active: false },
+                  { name: "Logout", key: "logout", active: false },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className={`px-6 py-4 ${
+                      item.active
+                        ? "bg-blue-500 text-white"
+                        : "bg-blue-600 text-white hover:bg-blue-500"
+                    } cursor-pointer transition-colors`}
+                    onClick={() => handleNavigation(item.key)}
+                  >
+                    <h3 className="font-semibold">{item.name}</h3>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

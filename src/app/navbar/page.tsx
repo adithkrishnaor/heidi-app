@@ -15,7 +15,12 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const handleNavClick = (page: string) => {
     if (onNavigate) {
-      onNavigate(page);
+      // If clicking "more", route directly to account
+      if (page === "more") {
+        onNavigate("more/account");
+      } else {
+        onNavigate(page);
+      }
     }
   };
 
@@ -135,7 +140,15 @@ const Navbar: React.FC<NavbarProps> = ({
                   handleNavClick("more");
                 }}
                 className={`px-3 py-2 ${
-                  currentPage === "more"
+                  currentPage === "more" ||
+                  currentPage === "account" ||
+                  currentPage === "contacts" ||
+                  currentPage === "billing" ||
+                  currentPage === "preferences" ||
+                  currentPage === "integrations" ||
+                  currentPage === "team & roles" ||
+                  currentPage === "faqs" ||
+                  currentPage === "support chat"
                     ? "bg-blue-500 text-white rounded-lg"
                     : "text-gray-500 hover:text-blue-600"
                 }`}
@@ -250,7 +263,15 @@ const Navbar: React.FC<NavbarProps> = ({
               handleNavClick("more");
             }}
             className={`px-3 py-2 ${
-              currentPage === "more"
+              currentPage === "more" ||
+              currentPage === "account" ||
+              currentPage === "contacts" ||
+              currentPage === "billing" ||
+              currentPage === "preferences" ||
+              currentPage === "integrations" ||
+              currentPage === "team & roles" ||
+              currentPage === "faqs" ||
+              currentPage === "support chat"
                 ? "bg-blue-500 text-white rounded-lg"
                 : "text-gray-500 hover:text-blue-600"
             }`}
