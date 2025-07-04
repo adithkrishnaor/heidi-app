@@ -84,7 +84,7 @@ const Home: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
               {/* Header with gradient */}
-              <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6">
+              <div className="bg-gradient-to-r from-[#008DDF] to-[#B3F0FF] text-white p-6">
                 <div className="flex items-center justify-between">
                   <div className="w-full text-center">
                     <LiveDateTime />
@@ -95,10 +95,10 @@ const Home: React.FC = () => {
               {/* Meeting List */}
               <div className="flex justify-center items-center p-6">
                 <Image
-                  src="/images/Icon.png"
+                  src="/images/pose_home.png"
                   alt="Heidi AI Icon"
-                  width={150}
-                  height={30}
+                  width={300}
+                  height={100}
                   className="mx-auto"
                 />
               </div>

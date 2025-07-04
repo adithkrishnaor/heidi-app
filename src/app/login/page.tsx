@@ -148,8 +148,6 @@ const Login = () => {
       <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] flex flex-col items-center justify-center p-8 text-white">
         <div className="relative">
           <center>
-            <br />
-            <br />
             <h1
               className="text-3xl font-bold"
               style={{
@@ -169,14 +167,12 @@ const Login = () => {
             </h1>
           </center>
         </div>
-        <br />
-        <br />
         <div className="relative">
           <Image
-            src="/images/pose_2.png"
+            src="/images/pose_1.png"
             alt="Heidi Pose 1"
-            width={400}
-            height={300}
+            width={500}
+            height={100}
           />
         </div>
       </div>

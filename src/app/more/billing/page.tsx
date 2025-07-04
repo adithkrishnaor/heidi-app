@@ -1,13 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import {
-  CreditCard,
-  Download,
-  Calendar,
-  CheckCircle,
-  AlertCircle,
-  Plus,
-} from "lucide-react";
 import Navbar from "../../navbar/page";
 import { useRouter } from "next/navigation";
 
