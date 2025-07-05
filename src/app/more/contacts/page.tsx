@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Search, User, MessageCircle, Video, Plus, Filter } from "lucide-react";
 import Navbar from "../../navbar/page";
+
 import { useRouter } from "next/navigation";
 
 const ContactsPage: React.FC = () => {

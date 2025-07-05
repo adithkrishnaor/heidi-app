@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, User } from "lucide-react";
 import Navbar from "../../navbar/page";
+import Sidebar from "../../more/sidebar/page";
 import { useRouter } from "next/navigation";
 
 const AccountPage: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState("account");
+  const [currentPage, setCurrentPage] = useState("more/account");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,68 +20,22 @@ const AccountPage: React.FC = () => {
   const router = useRouter();
 
   const handleNavigation = (page: string) => {
-    switch (page) {
-      case "home":
-        setCurrentPage("home");
-        router.push("/home");
-        break;
-      case "account":
-        setCurrentPage("account");
-        router.push("/more/account");
-        break;
-      case "contacts":
-        setCurrentPage("contacts");
-        router.push("/more/contacts");
-        break;
-      case "billing":
-        setCurrentPage("billing");
-        router.push("/more/billing");
-        break;
-      case "preferences":
-        setCurrentPage("preferences");
-        router.push("/more/preferences");
-        break;
-      case "integrations":
-        setCurrentPage("integrations");
-        router.push("/more/integrations");
-        break;
-      case "team & roles":
-        setCurrentPage("team & roles");
-        router.push("/more/team-roles");
-        break;
-      case "faqs":
-        setCurrentPage("faqs");
-        router.push("/more/faqs");
-        break;
-      case "support chat":
-        setCurrentPage("support chat");
-        router.push("/more/support");
-        break;
-      case "logout":
-        // Handle logout logic
-        console.log("Logging out...");
-        break;
-      case "meetings":
-        setCurrentPage("meetings");
-        router.push("/meetings");
-        break;
-      case "calendar":
-        setCurrentPage("calendar");
-        router.push("/calendar");
-        break;
-      case "ai":
-        setCurrentPage("ai");
-        router.push("/ai");
-        break;
-      case "more":
-        // When "More" is clicked, go to account and set currentPage to account
-        setCurrentPage("account");
-        router.push("/more/account");
-        break;
-      default:
-        setCurrentPage(page);
-        router.push(`/${page}`);
+    setCurrentPage(page);
+
+    // Handle navigation similar to navbar
+    if (page === "logout") {
+      // Clear any stored user data/tokens
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("userData");
+        sessionStorage.clear();
+      }
+      router.push("/login");
+      return;
     }
+
+    // Navigate to the appropriate route
+    router.push(`/${page}`);
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -99,212 +54,173 @@ const AccountPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <div className="col-span-3">
-            <div className="bg-blue-600 rounded-2xl overflow-hidden">
-              <div className="space-y-0">
-                {[
-                  { name: "Home", key: "home", active: false },
-                  { name: "Account", key: "account", active: true },
-                  { name: "Contacts", key: "contacts", active: false },
-                  { name: "Billing", key: "billing", active: false },
-                  { name: "Preferences", key: "preferences", active: false },
-                  { name: "Integrations", key: "integrations", active: false },
-                  { name: "Team & Roles", key: "team & roles", active: false },
-                  { name: "FAQs", key: "faqs", active: false },
-                  { name: "Support Chat", key: "support chat", active: false },
-                  { name: "Logout", key: "logout", active: false },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`px-6 py-4 ${
-                      item.active
-                        ? "bg-blue-500 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
-                    } cursor-pointer transition-colors`}
-                    onClick={() => handleNavigation(item.key)}
-                  >
-                    <h3 className="font-semibold">{item.name}</h3>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <div className="flex">
+        <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-          {/* Main Content Area */}
-          <div className="col-span-9">
-            <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <div className="flex items-start space-x-8">
-                {/* Profile Picture */}
-                <div className="flex-shrink-0">
-                  <div className="relative">
-                    <div className="w-32 h-32 rounded-full bg-gray-100 border-4 border-white shadow-lg overflow-hidden">
-                      <img
-                        src="/api/placeholder/128/128"
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                          if (e.currentTarget.nextElementSibling) {
-                            (
-                              e.currentTarget.nextElementSibling as HTMLElement
-                            ).style.display = "flex";
-                          }
-                        }}
-                      />
-                      <div
-                        className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center"
-                        style={{ display: "none" }}
-                      >
-                        <User className="w-12 h-12 text-white" />
-                      </div>
-                    </div>
-                    <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Form Fields */}
-                <div className="flex-1 space-y-6">
-                  {/* Name */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Here"
-                      value={formData.name}
-                      onChange={(e) =>
-                        handleInputChange("name", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    />
-                  </div>
-
-                  {/* Phone Number */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="Enter Here"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        handleInputChange("phone", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="Enter Here"
-                      value={formData.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                    />
-                  </div>
-
-                  {/* Password */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="********"
-                        value={formData.password}
-                        onChange={(e) =>
-                          handleInputChange("password", e.target.value)
+        {/* Main Content */}
+        <main className="flex-1 px-6 py-6">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8">
+            <div className="flex items-start space-x-8">
+              {/* Profile Picture */}
+              <div className="flex-shrink-0">
+                <div className="relative">
+                  <div className="w-32 h-32 rounded-full bg-gray-100 border-4 border-white shadow-lg overflow-hidden">
+                    <img
+                      src="/api/placeholder/128/128"
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                        if (e.currentTarget.nextElementSibling) {
+                          (
+                            e.currentTarget.nextElementSibling as HTMLElement
+                          ).style.display = "flex";
                         }
-                        className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Confirm Password */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Confirm Password
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="********"
-                        value={formData.confirmPassword}
-                        onChange={(e) =>
-                          handleInputChange("confirmPassword", e.target.value)
-                        }
-                        className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOff className="w-5 h-5" />
-                        ) : (
-                          <Eye className="w-5 h-5" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Save Button */}
-                  <div className="pt-4">
-                    <button
-                      onClick={handleSave}
-                      className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                      }}
+                    />
+                    <div
+                      className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center"
+                      style={{ display: "none" }}
                     >
-                      Save
+                      <User className="w-12 h-12 text-white" />
+                    </div>
+                  </div>
+                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Form Fields */}
+              <div className="flex-1 space-y-6">
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter Here"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                </div>
+
+                {/* Phone Number */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="Enter Here"
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="Enter Here"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  />
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="********"
+                      value={formData.password}
+                      onChange={(e) =>
+                        handleInputChange("password", e.target.value)
+                      }
+                      className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
                     </button>
                   </div>
+                </div>
+
+                {/* Confirm Password */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="********"
+                      value={formData.confirmPassword}
+                      onChange={(e) =>
+                        handleInputChange("confirmPassword", e.target.value)
+                      }
+                      className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Save Button */}
+                <div className="pt-4">
+                  <button
+                    onClick={handleSave}
+                    className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
