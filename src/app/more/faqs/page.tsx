@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "../../navbar/page";
+import Sidebar from "../../more/sidebar/page";
 import { useRouter } from "next/navigation";
 
 interface FAQItem {
@@ -18,49 +19,20 @@ const FAQsPage: React.FC = () => {
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
 
-    switch (page) {
-      case "home":
-        router.push("/home");
-        break;
-      case "account":
-        router.push("/more/account");
-        break;
-      case "contacts":
-        router.push("/more/contacts");
-        break;
-      case "billing":
-        router.push("/more/billing");
-        break;
-      case "preferences":
-        router.push("/more/preferences");
-        break;
-      case "integrations":
-        router.push("/more/integrations");
-        break;
-      case "team & roles":
-        router.push("/more/team-roles");
-        break;
-      case "faqs":
-        router.push("/more/faqs");
-        break;
-      case "support chat":
-        router.push("/more/support");
-        break;
-      case "logout":
-        console.log("Logging out...");
-        break;
-      case "meetings":
-        router.push("/meetings");
-        break;
-      case "calendar":
-        router.push("/calendar");
-        break;
-      case "more":
-        router.push("/more");
-        break;
-      default:
-        router.push(`/${page}`);
+    // Handle navigation similar to navbar
+    if (page === "logout") {
+      // Clear any stored user data/tokens
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("userData");
+        sessionStorage.clear();
+      }
+      router.push("/login");
+      return;
     }
+
+    // Navigate to the appropriate route
+    router.push(`/${page}`);
   };
 
   const faqData: FAQItem[] = [
@@ -113,44 +85,11 @@ const FAQsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
+      <div className="flex">
+        <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <div className="col-span-3">
-            <div className="bg-blue-600 rounded-2xl overflow-hidden">
-              <div className="space-y-0">
-                {[
-                  { name: "Home", key: "home", active: false },
-                  { name: "Account", key: "account", active: false },
-                  { name: "Contacts", key: "contacts", active: false },
-                  { name: "Billing", key: "billing", active: false },
-                  { name: "Preferences", key: "preferences", active: false },
-                  { name: "Integrations", key: "integrations", active: false },
-                  { name: "Team & Roles", key: "team & roles", active: false },
-                  { name: "FAQs", key: "faqs", active: true },
-                  { name: "Support Chat", key: "support chat", active: false },
-                  { name: "Logout", key: "logout", active: false },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`px-6 py-4 ${
-                      item.active
-                        ? "bg-blue-500 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
-                    } cursor-pointer transition-colors`}
-                    onClick={() => handleNavigation(item.key)}
-                  >
-                    <h3 className="font-semibold">{item.name}</h3>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content Area */}
-          <div className="col-span-9">
+        <main className="flex-1 ml-64 p-6">
+          <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
               {/* Header */}
               <div className="text-center mb-8">
@@ -215,8 +154,8 @@ const FAQsPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

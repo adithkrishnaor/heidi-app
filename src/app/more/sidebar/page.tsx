@@ -113,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       label: "Contacts",
       icon: <Users className="w-4 h-4" />,
       children: [
-        { id: "contacts", label: "Contacts List", icon: null },
+        { id: "more/contacts", label: "Contacts List", icon: null },
         { id: "contacts/segments", label: "Segments & Tags", icon: null },
       ],
     },
@@ -136,7 +136,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       ],
     },
     {
-      id: "billing",
+      id: "more/billing",
       label: "Billing",
       icon: <CreditCard className="w-4 h-4" />,
       children: [],

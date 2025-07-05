@@ -13,10 +13,11 @@ import {
   MessageSquare,
 } from "lucide-react";
 import Navbar from "../../navbar/page";
+import Sidebar from "../../more/sidebar/page";
 import { useRouter } from "next/navigation";
 
 const IntegrationsPage: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState("integrations");
+  const [currentPage, setCurrentPage] = useState("more/integrations");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
@@ -127,118 +128,116 @@ const IntegrationsPage: React.FC = () => {
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
 
-    switch (page) {
-      case "home":
-        router.push("/home");
-        break;
-      case "account":
-        router.push("/more/account");
-        break;
-      case "contacts":
-        router.push("/more/contacts");
-        break;
-      case "billing":
-        router.push("/more/billing");
-        break;
-      case "preferences":
-        router.push("/more/preferences");
-        break;
-      case "integrations":
-        router.push("/more/integrations");
-        break;
-      case "team & roles":
-        router.push("/more/team-roles");
-        break;
-      case "faqs":
-        router.push("/more/faqs");
-        break;
-      case "support chat":
-        router.push("/more/support");
-        break;
-      case "logout":
-        console.log("Logging out...");
-        break;
-      case "meetings":
-        router.push("/meetings");
-        break;
-      case "calendar":
-        router.push("/calendar");
-        break;
-      case "more":
-        router.push("/more");
-        break;
-      default:
-        router.push(`/${page}`);
+    // Handle navigation similar to AccountPage
+    if (page === "logout") {
+      // Clear any stored user data/tokens
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("userData");
+        sessionStorage.clear();
+      }
+      router.push("/login");
+      return;
     }
+
+    // Navigate to the appropriate route
+    router.push(`/${page}`);
   };
 
   const handleConnect = (integration: any) => {
     console.log(`Connecting to ${integration.name}`);
+    // Handle connection logic here
   };
+
+  const filteredIntegrations = integrations.filter(
+    (integration) =>
+      integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      integration.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <div className="col-span-3">
-            <div className="bg-blue-600 rounded-2xl overflow-hidden">
-              <div className="space-y-0">
-                {[
-                  { name: "Home", key: "home", active: false },
-                  { name: "Account", key: "account", active: false },
-                  { name: "Contacts", key: "contacts", active: false },
-                  { name: "Billing", key: "billing", active: false },
-                  { name: "Preferences", key: "preferences", active: false },
-                  { name: "Integrations", key: "integrations", active: true },
-                  { name: "Team & Roles", key: "team & roles", active: false },
-                  { name: "FAQs", key: "faqs", active: false },
-                  { name: "Support Chat", key: "support chat", active: false },
-                  { name: "Logout", key: "logout", active: false },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`px-6 py-4 ${
-                      item.active
-                        ? "bg-blue-500 text-white"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
-                    } cursor-pointer transition-colors`}
-                    onClick={() => handleNavigation(item.key)}
-                  >
-                    <h3 className="font-semibold">{item.name}</h3>
-                  </div>
-                ))}
+      <div className="flex">
+        <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
+
+        {/* Main Content */}
+        <main className="flex-1 px-6 py-6">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8">
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Integrations
+              </h1>
+              <p className="text-gray-600">
+                Connect your favorite apps and services
+              </p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-8">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search integrations..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                />
               </div>
             </div>
-          </div>
 
-          {/* Main Content Area */}
-          <div className="col-span-9">
-            <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              {/* Integrations Grid */}
-              <div className="grid grid-cols-4 gap-6">
-                {integrations.map((integration) => (
-                  <div
-                    key={integration.id}
-                    className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer"
-                  >
-                    <div className="text-center">
-                      <div className="mb-4">
-                        <div
-                          className={`w-16 h-16 ${integration.color} rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4`}
-                        >
-                          {integration.icon}
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                          {integration.name}
-                        </h3>
-                        <p className="text-sm text-gray-500 mb-4">
-                          {integration.description}
-                        </p>
+            {/* Integrations Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredIntegrations.map((integration) => (
+                <div
+                  key={integration.id}
+                  className="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer relative"
+                >
+                  {integration.isPopular && (
+                    <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                      Popular
+                    </div>
+                  )}
+
+                  <div className="text-center">
+                    <div className="mb-4">
+                      <div
+                        className={`w-16 h-16 ${integration.color} rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-4`}
+                      >
+                        {integration.icon}
                       </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        {integration.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mb-2">
+                        {integration.description}
+                      </p>
+                      <span className="inline-block bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full">
+                        {integration.category}
+                      </span>
+                    </div>
 
+                    {/* Features */}
+                    <div className="mb-4">
+                      <div className="text-xs text-gray-500 space-y-1">
+                        {integration.features
+                          .slice(0, 2)
+                          .map((feature, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center justify-center"
+                            >
+                              <span>• {feature}</span>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+
+                    {/* Status/Action */}
+                    <div className="mt-4">
                       {integration.status === "connected" ? (
                         <div className="flex items-center justify-center space-x-2 text-green-600">
                           <CheckCircle className="w-4 h-4" />
@@ -253,13 +252,37 @@ const IntegrationsPage: React.FC = () => {
                         </button>
                       )}
                     </div>
+
+                    {/* Connected Date */}
+                    {integration.connectedDate &&
+                      integration.status === "connected" && (
+                        <div className="mt-2 text-xs text-gray-400">
+                          Connected on{" "}
+                          {new Date(
+                            integration.connectedDate
+                          ).toLocaleDateString()}
+                        </div>
+                      )}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
+
+            {/* Empty State */}
+            {filteredIntegrations.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No integrations found
+                </h3>
+                <p className="text-gray-500">Try adjusting your search terms</p>
+              </div>
+            )}
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
