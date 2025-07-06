@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "meetings",
       label: "Meetings",
       icon: <Video className="w-4 h-4" />,
-      customIcon: "/icons/cam-recorder.png",
+      customIcon: "/icons/calendar.png",
       children: [
         { id: "meetings", label: "Recording Library", icon: null },
         { id: "meetings/capture", label: "Live Capture", icon: null },
@@ -92,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "insights",
       label: "Insights",
       icon: <Lightbulb className="w-4 h-4" />,
-      customIcon: "/icons/calendar.png",
+      customIcon: "/icons/insights.png",
       children: [
         { id: "insights", label: "Insights List", icon: null },
         { id: "insights/tasks", label: "Tasks", icon: null },
@@ -102,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "ai",
       label: "Heidi Core",
       icon: <MessageSquare className="w-4 h-4" />,
-      customIcon: "/images/Icon.png",
+      customIcon: "/icons/heidi_core.png",
       children: [
         { id: "ai", label: "New Chat", icon: null },
         { id: "ai/history", label: "Thread History", icon: null },
@@ -112,6 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "contacts",
       label: "Contacts",
       icon: <Users className="w-4 h-4" />,
+      customIcon: "/icons/contact.png",
       children: [
         { id: "more/contacts", label: "Contacts List", icon: null },
         { id: "contacts/segments", label: "Segments & Tags", icon: null },
@@ -121,6 +122,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "templates",
       label: "Templates",
       icon: <FileText className="w-4 h-4" />,
+      customIcon: "/icons/template.png",
       children: [
         { id: "templates", label: "Templates List", icon: null },
         { id: "templates/create", label: "Create/Edit Template", icon: null },
@@ -130,6 +132,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "analytics",
       label: "Analytics",
       icon: <BarChart3 className="w-4 h-4" />,
+      customIcon: "/icons/analytics.png",
       children: [
         { id: "analytics/personal", label: "Personal View", icon: null },
         { id: "analytics/team", label: "Team View", icon: null },
@@ -139,12 +142,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       id: "more/billing",
       label: "Billing",
       icon: <CreditCard className="w-4 h-4" />,
+      customIcon: "/icons/billings.png",
       children: [],
     },
     {
       id: "settings",
       label: "Settings",
       icon: <Settings className="w-4 h-4" />,
+      customIcon: "/icons/settings.png",
       children: [
         { id: "more/account", label: "Profile & Preferences", icon: null },
         { id: "more/integrations", label: "Integrations", icon: null },
