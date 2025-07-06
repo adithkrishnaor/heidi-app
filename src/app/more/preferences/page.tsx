@@ -10,8 +10,7 @@ import {
   Smartphone,
   Monitor,
 } from "lucide-react";
-import Navbar from "../../navbar/page";
-import Sidebar from "../../more/sidebar/page";
+import Sidebar from "../../sidebar/page";
 import { useRouter } from "next/navigation";
 
 // Define the preferences type
@@ -135,334 +134,312 @@ const PreferencesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
+      <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      <div className="flex">
-        <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
-
-        {/* Main Content */}
-        <main className="flex-1 px-6 py-6">
-          <div className="space-y-6">
-            {/* Notifications */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Bell className="w-5 h-5 text-blue-600" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Notifications
-                </h2>
+      {/* Main Content */}
+      <main className="ml-64 px-6 py-6">
+        <div className="space-y-6">
+          {/* Notifications */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Bell className="w-5 h-5 text-blue-600" />
               </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        Email Notifications
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Receive notifications via email
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.emailNotifications}
-                    onChange={(value) =>
-                      updatePreference(
-                        "notifications",
-                        "emailNotifications",
-                        value
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <Monitor className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        Push Notifications
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Receive push notifications in browser
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.pushNotifications}
-                    onChange={(value) =>
-                      updatePreference(
-                        "notifications",
-                        "pushNotifications",
-                        value
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <Smartphone className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        SMS Notifications
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Receive text messages for important updates
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.smsNotifications}
-                    onChange={(value) =>
-                      updatePreference(
-                        "notifications",
-                        "smsNotifications",
-                        value
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <Bell className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        Meeting Reminders
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Get reminded about upcoming meetings
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.meetingReminders}
-                    onChange={(value) =>
-                      updatePreference(
-                        "notifications",
-                        "meetingReminders",
-                        value
-                      )
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <Monitor className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        System Updates
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Notifications about system updates and maintenance
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.systemUpdates}
-                    onChange={(value) =>
-                      updatePreference("notifications", "systemUpdates", value)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3">
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        Marketing Emails
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Receive promotional emails and feature updates
-                      </p>
-                    </div>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.notifications.marketingEmails}
-                    onChange={(value) =>
-                      updatePreference(
-                        "notifications",
-                        "marketingEmails",
-                        value
-                      )
-                    }
-                  />
-                </div>
-              </div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Notifications
+              </h2>
             </div>
 
-            {/* Privacy */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-green-600" />
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <h3 className="font-medium text-gray-900">
+                      Email Notifications
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Receive notifications via email
+                    </p>
+                  </div>
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Privacy & Security
-                </h2>
+                <ToggleSwitch
+                  enabled={preferences.notifications.emailNotifications}
+                  onChange={(value) =>
+                    updatePreference(
+                      "notifications",
+                      "emailNotifications",
+                      value
+                    )
+                  }
+                />
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Profile Visibility
-                  </label>
-                  <select
-                    value={preferences.privacy.profileVisibility}
-                    onChange={(e) =>
-                      updatePreference(
-                        "privacy",
-                        "profileVisibility",
-                        e.target.value
-                      )
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
-                    <option value="contacts">Contacts Only</option>
-                  </select>
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Monitor className="w-5 h-5 text-gray-400" />
                   <div>
                     <h3 className="font-medium text-gray-900">
-                      Activity Status
+                      Push Notifications
                     </h3>
                     <p className="text-sm text-gray-600">
-                      Show when you're online to other users
+                      Receive push notifications in browser
                     </p>
                   </div>
-                  <ToggleSwitch
-                    enabled={preferences.privacy.activityStatus}
-                    onChange={(value) =>
-                      updatePreference("privacy", "activityStatus", value)
-                    }
-                  />
                 </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div>
-                    <h3 className="font-medium text-gray-900">
-                      Data Collection
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Allow collection of usage data for improvement
-                    </p>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.privacy.dataCollection}
-                    onChange={(value) =>
-                      updatePreference("privacy", "dataCollection", value)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3">
-                  <div>
-                    <h3 className="font-medium text-gray-900">
-                      Third-party Sharing
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Share data with trusted third-party services
-                    </p>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.privacy.thirdPartySharing}
-                    onChange={(value) =>
-                      updatePreference("privacy", "thirdPartySharing", value)
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Audio Settings */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Volume2 className="w-5 h-5 text-yellow-600" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Audio Settings
-                </h2>
+                <ToggleSwitch
+                  enabled={preferences.notifications.pushNotifications}
+                  onChange={(value) =>
+                    updatePreference(
+                      "notifications",
+                      "pushNotifications",
+                      value
+                    )
+                  }
+                />
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div>
-                    <h3 className="font-medium text-gray-900">Microphone</h3>
-                    <p className="text-sm text-gray-600">
-                      Enable microphone for meetings
-                    </p>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.audio.microphoneEnabled}
-                    onChange={(value) =>
-                      updatePreference("audio", "microphoneEnabled", value)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div>
-                    <h3 className="font-medium text-gray-900">Speaker</h3>
-                    <p className="text-sm text-gray-600">
-                      Enable speaker output for meetings
-                    </p>
-                  </div>
-                  <ToggleSwitch
-                    enabled={preferences.audio.speakerEnabled}
-                    onChange={(value) =>
-                      updatePreference("audio", "speakerEnabled", value)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between py-3 border-b border-gray-100">
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Smartphone className="w-5 h-5 text-gray-400" />
                   <div>
                     <h3 className="font-medium text-gray-900">
-                      Noise Reduction
+                      SMS Notifications
                     </h3>
                     <p className="text-sm text-gray-600">
-                      Filter out background noise during calls
+                      Receive text messages for important updates
                     </p>
                   </div>
-                  <ToggleSwitch
-                    enabled={preferences.audio.noiseReduction}
-                    onChange={(value) =>
-                      updatePreference("audio", "noiseReduction", value)
-                    }
-                  />
                 </div>
+                <ToggleSwitch
+                  enabled={preferences.notifications.smsNotifications}
+                  onChange={(value) =>
+                    updatePreference("notifications", "smsNotifications", value)
+                  }
+                />
+              </div>
 
-                <div className="flex items-center justify-between py-3">
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Bell className="w-5 h-5 text-gray-400" />
                   <div>
                     <h3 className="font-medium text-gray-900">
-                      Echo Suppression
+                      Meeting Reminders
                     </h3>
                     <p className="text-sm text-gray-600">
-                      Reduce echo during audio calls
+                      Get reminded about upcoming meetings
                     </p>
                   </div>
-                  <ToggleSwitch
-                    enabled={preferences.audio.echoSuppression}
-                    onChange={(value) =>
-                      updatePreference("audio", "echoSuppression", value)
-                    }
-                  />
                 </div>
+                <ToggleSwitch
+                  enabled={preferences.notifications.meetingReminders}
+                  onChange={(value) =>
+                    updatePreference("notifications", "meetingReminders", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Monitor className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <h3 className="font-medium text-gray-900">
+                      System Updates
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Notifications about system updates and maintenance
+                    </p>
+                  </div>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.notifications.systemUpdates}
+                  onChange={(value) =>
+                    updatePreference("notifications", "systemUpdates", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3">
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <h3 className="font-medium text-gray-900">
+                      Marketing Emails
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Receive promotional emails and feature updates
+                    </p>
+                  </div>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.notifications.marketingEmails}
+                  onChange={(value) =>
+                    updatePreference("notifications", "marketingEmails", value)
+                  }
+                />
               </div>
             </div>
           </div>
-        </main>
-      </div>
+
+          {/* Privacy */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-green-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Privacy & Security
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Profile Visibility
+                </label>
+                <select
+                  value={preferences.privacy.profileVisibility}
+                  onChange={(e) =>
+                    updatePreference(
+                      "privacy",
+                      "profileVisibility",
+                      e.target.value
+                    )
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                  <option value="contacts">Contacts Only</option>
+                </select>
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-medium text-gray-900">Activity Status</h3>
+                  <p className="text-sm text-gray-600">
+                    Show when you're online to other users
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.privacy.activityStatus}
+                  onChange={(value) =>
+                    updatePreference("privacy", "activityStatus", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-medium text-gray-900">Data Collection</h3>
+                  <p className="text-sm text-gray-600">
+                    Allow collection of usage data for improvement
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.privacy.dataCollection}
+                  onChange={(value) =>
+                    updatePreference("privacy", "dataCollection", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3">
+                <div>
+                  <h3 className="font-medium text-gray-900">
+                    Third-party Sharing
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Share data with trusted third-party services
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.privacy.thirdPartySharing}
+                  onChange={(value) =>
+                    updatePreference("privacy", "thirdPartySharing", value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Audio Settings */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <Volume2 className="w-5 h-5 text-yellow-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Audio Settings
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-medium text-gray-900">Microphone</h3>
+                  <p className="text-sm text-gray-600">
+                    Enable microphone for meetings
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.audio.microphoneEnabled}
+                  onChange={(value) =>
+                    updatePreference("audio", "microphoneEnabled", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-medium text-gray-900">Speaker</h3>
+                  <p className="text-sm text-gray-600">
+                    Enable speaker output for meetings
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.audio.speakerEnabled}
+                  onChange={(value) =>
+                    updatePreference("audio", "speakerEnabled", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                <div>
+                  <h3 className="font-medium text-gray-900">Noise Reduction</h3>
+                  <p className="text-sm text-gray-600">
+                    Filter out background noise during calls
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.audio.noiseReduction}
+                  onChange={(value) =>
+                    updatePreference("audio", "noiseReduction", value)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between py-3">
+                <div>
+                  <h3 className="font-medium text-gray-900">
+                    Echo Suppression
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Reduce echo during audio calls
+                  </p>
+                </div>
+                <ToggleSwitch
+                  enabled={preferences.audio.echoSuppression}
+                  onChange={(value) =>
+                    updatePreference("audio", "echoSuppression", value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

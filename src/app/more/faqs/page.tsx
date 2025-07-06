@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import Navbar from "../../navbar/page";
-import Sidebar from "../../more/sidebar/page";
+import Sidebar from "../../sidebar/page";
 import { useRouter } from "next/navigation";
 
 interface FAQItem {
@@ -84,78 +83,75 @@ const FAQsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
-      <div className="flex">
-        <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
+      <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-        <main className="flex-1 ml-64 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              {/* Header */}
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Frequently Asked Questions
-                </h1>
-                <p className="text-gray-600">
-                  Find answers to common questions about Heidi AI
-                </p>
-              </div>
+      <main className="ml-64 ml-64 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl border border-gray-200 p-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Frequently Asked Questions
+              </h1>
+              <p className="text-gray-600">
+                Find answers to common questions about Heidi AI
+              </p>
+            </div>
 
-              {/* FAQ List */}
-              <div className="space-y-4">
-                {faqData.map((faq, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md"
-                  >
-                    <button
-                      onClick={() => toggleFAQ(index)}
-                      className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
-                    >
-                      <span className="font-medium text-gray-900 pr-4">
-                        {faq.question}
-                      </span>
-                      <div className="flex-shrink-0 text-blue-600">
-                        {openFAQ === index ? (
-                          <ChevronUp className="w-5 h-5" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5" />
-                        )}
-                      </div>
-                    </button>
-                    {openFAQ === index && (
-                      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                        <p className="text-gray-700 leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Contact Support Section */}
-              <div className="mt-12 text-center">
-                <div className="bg-blue-50 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Still have questions?
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Our support team is here to help you get the most out of
-                    Heidi AI
-                  </p>
+            {/* FAQ List */}
+            <div className="space-y-4">
+              {faqData.map((faq, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md"
+                >
                   <button
-                    onClick={() => handleNavigation("support chat")}
-                    className="bg-gradient-to-r from-blue-400 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                    onClick={() => toggleFAQ(index)}
+                    className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
                   >
-                    Contact Support
+                    <span className="font-medium text-gray-900 pr-4">
+                      {faq.question}
+                    </span>
+                    <div className="flex-shrink-0 text-blue-600">
+                      {openFAQ === index ? (
+                        <ChevronUp className="w-5 h-5" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5" />
+                      )}
+                    </div>
                   </button>
+                  {openFAQ === index && (
+                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                      <p className="text-gray-700 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  )}
                 </div>
+              ))}
+            </div>
+
+            {/* Contact Support Section */}
+            <div className="mt-12 text-center">
+              <div className="bg-blue-50 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Still have questions?
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Our support team is here to help you get the most out of Heidi
+                  AI
+                </p>
+                <button
+                  onClick={() => handleNavigation("more/support")}
+                  className="bg-gradient-to-r from-blue-400 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                >
+                  Contact Support
+                </button>
               </div>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };

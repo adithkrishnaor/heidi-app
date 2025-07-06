@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       customIcon: "/icons/home.png",
       children: [
         { id: "home", label: "Overview", icon: null },
-        { id: "home/upcoming", label: "Upcoming Meetings", icon: null },
+        { id: "calendar", label: "Upcoming Meetings", icon: null },
       ],
     },
     {
@@ -268,7 +268,23 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-screen overflow-y-auto">
+    <div className="w-64 bg-white border-r border-gray-200 h-screen overflow-y-auto fixed left-0 top-0 z-50">
+      {/* Logo Section */}
+      <div className="px-4 py-6 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Image
+              src="/images/icon_and_text.png"
+              alt="Heidi AI Text"
+              width={160}
+              height={120}
+              className="h-8 w-auto"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Items */}
       <div className="py-4">
         {sidebarData.map((item) => renderSidebarItem(item))}
       </div>

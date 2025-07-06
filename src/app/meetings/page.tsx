@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Play, Video, Plus } from "lucide-react";
-import Navbar from "./../navbar/page"; // Same navbar component
+import Sidebar from "../sidebar/page";
 import { useRouter } from "next/navigation";
 
 interface Meeting {
@@ -120,8 +120,8 @@ const MeetingsPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-6">

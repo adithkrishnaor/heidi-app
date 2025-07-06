@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Calendar, Clock, X, ChevronRight } from "lucide-react";
-import Navbar from "./../navbar/page"; // Import the extracted navbar
+import Sidebar from "../sidebar/page";
 import { useRouter } from "next/navigation";
 
 const SchedulePage = () => {
@@ -88,10 +88,10 @@ const SchedulePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
+    <div className="min-h-screen bg-gray-50 ">
+      <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="ml-64 max-w-7xl mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Schedule Today Section */}
           <div className="bg-white rounded-2xl p-6 shadow-sm">

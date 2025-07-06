@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Video, Plus, Upload, Play, Clock } from "lucide-react";
 import Image from "next/image";
-import Navbar from "./../navbar/page";
+import Sidebar from "../sidebar/page";
 import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
@@ -20,10 +20,10 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigation} />
+      <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16 md:mb-0">
+      <main className="ml-64 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-16 md:mb-0">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
