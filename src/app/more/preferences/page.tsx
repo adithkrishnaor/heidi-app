@@ -85,11 +85,13 @@ const PreferencesPage: React.FC = () => {
     router.push(`/${page}`);
   };
 
-  // Fix the updatePreference function with proper typing
-  const updatePreference = <T extends keyof PreferencesType>(
+  const updatePreference = <
+    T extends keyof PreferencesType,
+    K extends keyof PreferencesType[T]
+  >(
     section: T,
-    key: keyof PreferencesType[T],
-    value: any
+    key: K,
+    value: PreferencesType[T][K]
   ) => {
     setPreferences((prev) => ({
       ...prev,
