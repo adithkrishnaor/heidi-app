@@ -4,7 +4,6 @@ import {
   ChevronDown,
   ChevronRight,
   Home,
-  Calendar,
   Users,
   BarChart3,
   FileText,
@@ -12,16 +11,9 @@ import {
   HelpCircle,
   LogOut,
   Video,
-  Play,
-  Camera,
   Lightbulb,
-  CheckSquare,
   MessageSquare,
-  History,
-  Tag,
-  User,
   CreditCard,
-  Bell,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

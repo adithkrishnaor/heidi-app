@@ -1,15 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Bell,
-  Moon,
-  Globe,
-  Shield,
-  Volume2,
-  Mail,
-  Smartphone,
-  Monitor,
-} from "lucide-react";
+import { Bell, Shield, Volume2, Mail, Smartphone, Monitor } from "lucide-react";
 import Sidebar from "../../sidebar/page";
 import { useRouter } from "next/navigation";
 

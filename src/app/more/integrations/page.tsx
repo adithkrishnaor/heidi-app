@@ -1,17 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Search,
-  Plus,
-  Settings,
-  CheckCircle,
-  XCircle,
-  ExternalLink,
-  Zap,
-  Globe,
-  Database,
-  MessageSquare,
-} from "lucide-react";
+import { Search, CheckCircle } from "lucide-react";
 import Sidebar from "../../sidebar/page";
 import { useRouter } from "next/navigation";
 
