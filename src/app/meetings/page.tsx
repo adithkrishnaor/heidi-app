@@ -69,7 +69,7 @@ const MeetingsPage: React.FC = () => {
 
   const renderMeetingHistory = () => (
     <div className="space-y-0 divide-y divide-gray-100">
-      {meetings.map((meeting, index) => (
+      {meetings.map((meeting) => (
         <div
           key={meeting.id}
           className={`flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50 transition-colors ${

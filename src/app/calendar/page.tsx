@@ -83,7 +83,15 @@ const SchedulePage = () => {
 
   const handleSaveSchedule = () => {
     // Handle save logic here
-    console.log("Saving schedule:", { selectedDate, startTime, endTime, note });
+    console.log("Saving schedule:", {
+      selectedDate,
+      setSelectedDate,
+      startTime,
+      setStartTime,
+      endTime,
+      setEndTime,
+      note,
+    });
     setShowScheduleModal(false);
   };
 
