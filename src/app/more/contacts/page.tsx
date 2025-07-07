@@ -7,11 +7,20 @@ import { useRouter } from "next/navigation";
 const ContactsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("more/contacts");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedContact, setSelectedContact] = useState<any>(null);
+  const [selectedContact, setSelectedContact] = useState<Contacts | null>(null);
   const router = useRouter();
 
+  interface Contacts {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    lastContact: string;
+    status: "active" | "inactive";
+  }
   // Mock contacts data
-  const [contacts] = useState([
+  const [contacts] = useState<Contacts[]>([
     {
       id: 1,
       name: "John Doe",
@@ -84,15 +93,15 @@ const ContactsPage: React.FC = () => {
       contact.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleContactSelect = (contact: any) => {
+  const handleContactSelect = (contact: Contacts) => {
     setSelectedContact(contact);
   };
 
-  const handleStartChat = (contact: any) => {
+  const handleStartChat = (contact: Contacts) => {
     console.log(`Starting chat with ${contact.name}`);
   };
 
-  const handleStartMeeting = (contact: any) => {
+  const handleStartMeeting = (contact: Contacts) => {
     console.log(`Starting meeting with ${contact.name}`);
   };
 

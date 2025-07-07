@@ -7,11 +7,19 @@ import { useRouter } from "next/navigation";
 const TeamRolesPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("more/team-roles");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<TeamMember | null>(null);
   const router = useRouter();
 
-  // Mock team data
-  const [teamMembers] = useState([
+  interface TeamMember {
+    id: number;
+    name: string;
+    role: string;
+    email: string;
+    avatar: string | null;
+    status: "active" | "inactive";
+  }
+
+  const [teamMembers] = useState<TeamMember[]>([
     {
       id: 1,
       name: "John Doe",
@@ -120,7 +128,7 @@ const TeamRolesPage: React.FC = () => {
       member.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleUserSelect = (user: any) => {
+  const handleUserSelect = (user: TeamMember) => {
     setSelectedUser(user);
   };
 

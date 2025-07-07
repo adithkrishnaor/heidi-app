@@ -9,8 +9,21 @@ const IntegrationsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
+  interface Integration {
+    id: number;
+    name: string;
+    description: string;
+    category: string;
+    status: "connected" | "available";
+    icon: string;
+    color: string;
+    connectedDate?: string | null;
+    features: string[];
+    isPopular?: boolean;
+  }
+
   // Mock integrations data
-  const [integrations] = useState([
+  const [integrations] = useState<Integration[]>([
     {
       id: 1,
       name: "Slack",
@@ -128,13 +141,11 @@ const IntegrationsPage: React.FC = () => {
       return;
     }
 
-    // Navigate to the appropriate route
     router.push(`/${page}`);
   };
 
-  const handleConnect = (integration: any) => {
+  const handleConnect = (integration: Integration) => {
     console.log(`Connecting to ${integration.name}`);
-    // Handle connection logic here
   };
 
   const filteredIntegrations = integrations.filter(
