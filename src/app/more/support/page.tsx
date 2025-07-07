@@ -84,8 +84,8 @@ const SupportChatPage: React.FC = () => {
                 Support Chat
               </h1>
               <p className="text-gray-600">
-                We're here to help! Send us a message and we'll get back to you
-                soon.
+                We&apos;re here to help! Send us a message and we&apos;ll get
+                back to you soon.
               </p>
             </div>
           </div>
@@ -114,7 +114,7 @@ const SupportChatPage: React.FC = () => {
                     Message Sent Successfully!
                   </h3>
                   <p className="text-green-700 text-sm">
-                    We'll get back to you within 24 hours.
+                    We&apos;ll get back to you within 24 hours.
                   </p>
                 </div>
               </div>

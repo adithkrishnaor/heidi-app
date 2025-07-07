@@ -309,7 +309,7 @@ const PreferencesPage: React.FC = () => {
                 <div>
                   <h3 className="font-medium text-gray-900">Activity Status</h3>
                   <p className="text-sm text-gray-600">
-                    Show when you're online to other users
+                    Show when you&apos;re online to other users
                   </p>
                 </div>
                 <ToggleSwitch

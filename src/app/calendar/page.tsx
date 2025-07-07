@@ -130,7 +130,7 @@ const SchedulePage = () => {
             <div className="mt-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Reminder</h3>
               <p className="text-gray-600 mb-4">
-                Don't forget schedule for tomorrow
+                Don&apos;t forget schedule for tomorrow
               </p>
 
               <div className="space-y-3">
@@ -211,7 +211,7 @@ const SchedulePage = () => {
           <div className="bg-white rounded-2xl p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-gray-900">
-                Let's set the schedule easily
+                Let&apos;s set the schedule easily
               </h3>
               <button
                 onClick={() => setShowScheduleModal(false)}

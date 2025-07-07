@@ -30,7 +30,7 @@ const Home: React.FC = () => {
             Heidi – Welcome Message
           </h2>
           <p className="text-blue-500 font-medium">
-            Hello Name! Here's your day overview
+            Hello Name! Here&apos;s your day overview
           </p>
         </div>
 

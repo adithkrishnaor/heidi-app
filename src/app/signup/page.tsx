@@ -48,7 +48,7 @@ const Signup = () => {
                 textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
               }}
             >
-              <strong>Meeting's over. I've got the goods.</strong>
+              <strong>Meeting&apos;s over. I&apos;ve got the goods.</strong>
               <br /> <br />
               <span
                 className="font-normal"

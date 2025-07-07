@@ -102,7 +102,7 @@ const Login = () => {
           </div>
 
           <div className="text-center">
-            <span className="text-blue-500">Don't have an account? </span>
+            <span className="text-blue-500">Don&apos;t have an account? </span>
             <Link
               href="/signup"
               className="text-blue-500 hover:underline font-medium bg-transparent border-none cursor-pointer"
@@ -156,7 +156,7 @@ const Login = () => {
                 textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
               }}
             >
-              <strong>Meeting's over. I've got the goods.</strong>
+              <strong>Meeting&apos;s over. I&apos;ve got the goods.</strong>
               <br /> <br />
               <span
                 className="font-normal"
