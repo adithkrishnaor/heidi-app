@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Search, User, MessageSquare, Video } from "lucide-react";
-import Sidebar from "../../sidebar/page";
+import Sidebar from "../../../components/SIdebar";
 import { useRouter } from "next/navigation";
 
 const TeamRolesPage: React.FC = () => {

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Search, User, MessageCircle, Video, Plus, Filter } from "lucide-react";
-import Sidebar from "../../sidebar/page";
+import Sidebar from "../../../components/SIdebar";
 import { useRouter } from "next/navigation";
 
 const ContactsPage: React.FC = () => {

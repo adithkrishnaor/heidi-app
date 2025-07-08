@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Send, MessageCircle } from "lucide-react";
-import Sidebar from "../../sidebar/page";
+import Sidebar from "../../../components/SIdebar";
 import { useRouter } from "next/navigation";
 
 const SupportChatPage: React.FC = () => {
