@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Bell, Shield, Volume2, Mail, Smartphone, Monitor } from "lucide-react";
-import Sidebar from "../../../components/SIdebar";
+import Sidebar from "../../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
 // Define the preferences type

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Calendar, Clock, X, ChevronRight } from "lucide-react";
-import Sidebar from "../../components/SIdebar";
+import Sidebar from "../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
 const SchedulePage = () => {

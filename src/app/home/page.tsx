@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Video, Plus, Upload, Play, Clock } from "lucide-react";
 import Image from "next/image";
-import Sidebar from "../../components/SIdebar";
+import Sidebar from "../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
