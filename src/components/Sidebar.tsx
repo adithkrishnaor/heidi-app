@@ -159,7 +159,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       ],
     },
     {
-      id: "logout",
+      id: "login",
       label: "Logout",
       icon: <LogOut className="w-4 h-4" />,
       children: [],
