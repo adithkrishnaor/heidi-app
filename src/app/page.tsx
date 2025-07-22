@@ -1,11 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
 import Home1 from "./home/page";
+import Login from "./login/page";
 
 export default function Home() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState("login");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    setCurrentPage("home");
+  };
+
   const renderPage = () => {
+    if (!isLoggedIn) {
+      return <Login onLogin={handleLogin} />;
+    }
+    
     switch (currentPage) {
       case "home":
         return <Home1 />;
@@ -13,9 +24,9 @@ export default function Home() {
         return <Home1 />;
     }
   };
+
   return (
     <div>
-      <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       {renderPage()}
     </div>
   );

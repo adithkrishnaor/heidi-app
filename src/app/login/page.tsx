@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-const Login = () => {
-  const router = useRouter();
+interface LoginProps {
+  onLogin?: () => void;
+}
+
+const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     emailOrPhone: "",
     password: "",
@@ -23,14 +25,20 @@ const Login = () => {
   const handleSubmit = () => {
     console.log("Login submitted:", formData);
     // Add your login logic here
-    // Import useRouter from Next.js
-
-    router.push("/home");
+    
+    // Call the onLogin callback if provided
+    if (onLogin) {
+      onLogin();
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
     console.log(`Login with ${provider}`);
     // Add social login logic here
+    // After successful social login, call onLogin
+    if (onLogin) {
+      onLogin();
+    }
   };
 
   const handleForgotPassword = () => {
@@ -144,37 +152,13 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right side - Branding */}
-      <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] flex flex-col items-center justify-center p-8 text-white">
-        <div className="relative">
-          <center>
-            <h1
-              className="text-3xl font-bold"
-              style={{
-                fontFamily: "Poupin, sans-serif",
-                color: "#FFE310",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <strong>Meeting&apos;s over. I&apos;ve got the goods.</strong>
-              <br /> <br />
-              <span
-                className="font-normal"
-                style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)" }}
-              >
-                You? Just go be brilliant.
-              </span>
-            </h1>
-          </center>
-        </div>
-        <div className="relative">
-          <Image
-            src="/images/pose_1.png"
-            alt="Heidi Pose 1"
-            width={500}
-            height={100}
-          />
-        </div>
+      <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] relative">
+        <Image
+          src="/images/login_img.png"
+          alt="Heidi Pose 1"
+          fill
+          className="object-cover"
+        />
       </div>
     </div>
   );
