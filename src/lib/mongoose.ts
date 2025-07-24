@@ -11,13 +11,14 @@ interface CachedConnection {
   promise: Promise<typeof mongoose> | null;
 }
 
-// Global is used here to maintain a cached connection across hot reloads
+// Type the global object properly to avoid 'any' errors
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, @typescript-eslint/no-explicit-any
   var mongooseCache: CachedConnection | undefined;
 }
-  
-let cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
+
+// Initialize the cache
+const cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;
