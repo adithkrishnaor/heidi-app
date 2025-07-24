@@ -48,11 +48,20 @@ export async function POST(request: NextRequest) {
       user: userResponse
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    
+    // Type guard to handle the error properly
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: `Login failed: ${error.message}` },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
   }
 }

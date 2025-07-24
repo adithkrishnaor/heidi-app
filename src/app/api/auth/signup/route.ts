@@ -31,12 +31,20 @@ export async function GET(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching users:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch users' },
-      { status: 500 }
-    );
+    
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: `Failed to fetch users: ${error.message}` },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: 'Failed to fetch users' },
+        { status: 500 }
+      );
+    }
   }
 }
 
@@ -115,12 +123,13 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating user:', error);
 
     // Handle mongoose validation errors
-    if (error.name === 'ValidationError') {
-      const validationErrors = Object.values(error.errors).map((err: any) => err.message);
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'ValidationError') {
+      const validationError = error as unknown as { errors: Record<string, { message: string }> };
+      const validationErrors = Object.values(validationError.errors).map(err => err.message);
       return NextResponse.json(
         {
           success: false,
@@ -131,7 +140,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle duplicate key error
-    if (error.code === 11000) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
       return NextResponse.json(
         {
           success: false,
@@ -142,12 +151,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Generic error
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Failed to create user'
-      },
-      { status: 500 }
-    );
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Failed to create user: ${error.message}`
+        },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Failed to create user'
+        },
+        { status: 500 }
+      );
+    }
   }
 }
