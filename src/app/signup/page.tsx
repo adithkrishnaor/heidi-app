@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     emailOrPhone: "",
     password: "",
@@ -12,6 +14,7 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -20,14 +23,40 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = () => {
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  setIsLoading(true);
+  try {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.emailOrPhone,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log('User created successfully:', data.user);
+      // Redirect to login page or dashboard
+      router.push('/login'); 
+    } else {
+      console.error('Signup failed:', data.message);
+      // Show error message to user
+      // setError(data.message); // Uncomment and define setError if needed
     }
-    console.log("Signup submitted:", formData);
-    // Add your signup logic here
-  };
+  } catch (error) {
+    console.error('Network error:', error);
+    // setError('Something went wrong. Please try again.'); // Uncomment and define setError if needed
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleSocialSignup = (provider: string) => {
     console.log(`Sign up with ${provider}`);
@@ -144,9 +173,10 @@ const Signup = () => {
 
             <button
               onClick={handleSubmit}
-              className="w-full bg-blue-500 text-white py-3 rounded-full font-semibold hover:bg-blue-600 transition duration-200"
+              disabled={isLoading}
+              className="w-full bg-blue-500 text-white py-3 rounded-full font-semibold hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign Up
+              {isLoading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </div>
 

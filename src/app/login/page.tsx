@@ -3,17 +3,20 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface LoginProps {
   onLogin?: () => void;
 }
-
+ 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     emailOrPhone: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -22,13 +25,47 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("Login submitted:", formData);
-    // Add your login logic here
-    
-    // Call the onLogin callback if provided
-    if (onLogin) {
-      onLogin();
+  const handleSubmit = async () => {
+    if (!formData.emailOrPhone || !formData.password) {
+      alert('Please fill in all fields!');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.emailOrPhone,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store user data in localStorage (optional)
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Call the onLogin callback if provided
+        if (onLogin) {
+          onLogin();
+        }
+        else{
+          router.push('/home'); 
+        }
+      } else {
+        alert(data.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -103,9 +140,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
             <button
               onClick={handleSubmit}
-              className="w-full bg-blue-500 text-white py-3 rounded-full font-semibold hover:bg-blue-600 transition duration-200"
+              disabled={isLoading}
+              className="w-full bg-blue-500 text-white py-3 rounded-full font-semibold hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Log In
+              {isLoading ? 'Logging In...' : 'Log In'}
             </button>
           </div>
 

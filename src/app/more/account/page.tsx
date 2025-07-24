@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff, User } from "lucide-react";
+import { Eye, EyeOff, Image, User } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
@@ -67,7 +67,7 @@ const AccountPage: React.FC = () => {
                     alt="Profile"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.style.display = "none";
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
                       if (e.currentTarget.nextElementSibling) {
                         (
                           e.currentTarget.nextElementSibling as HTMLElement

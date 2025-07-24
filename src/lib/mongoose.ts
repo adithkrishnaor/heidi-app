@@ -11,39 +11,45 @@ interface CachedConnection {
   promise: Promise<typeof mongoose> | null;
 }
 
-// Use global to maintain a cached connection across hot reloads in development
-let cached: CachedConnection = (global as any).mongoose || { conn: null, promise: null };
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+// Global is used here to maintain a cached connection across hot reloads
+declare global {
+  var mongooseCache: CachedConnection | undefined;
 }
 
-export async function connectToDatabase() {
-  // If we have a cached connection, return it
+let cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
+
+if (!global.mongooseCache) {
+  global.mongooseCache = cached;
+}
+
+async function connectToDatabase(): Promise<typeof mongoose> {
   if (cached.conn) {
+    console.log('📁 Using existing MongoDB connection');
     return cached.conn;
   }
 
-  // If we don't have a promise, create one
   if (!cached.promise) {
-    const options = {
-      bufferCommands: false, // Disable mongoose buffering
-      maxPoolSize: 10, // Maintain up to 10 socket connections
-      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      family: 4, // Use IPv4, skip trying IPv6
+    console.log('🔌 Creating new MongoDB connection...');
+    
+    const opts = {
+      bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, options);
+    cached.promise = mongoose.connect(MONGODB_URI!, opts);
   }
 
   try {
     cached.conn = await cached.promise;
-    console.log('Connected to MongoDB');
+    console.log('✅ Connected to MongoDB successfully');
     return cached.conn;
-  } catch (e) {
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error);
     cached.promise = null;
-    console.error('MongoDB connection error:', e);
-    throw e;
+    throw error;
   }
 }
+
+export default connectToDatabase;
