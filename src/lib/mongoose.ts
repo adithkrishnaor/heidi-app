@@ -1,10 +1,5 @@
 import mongoose from 'mongoose';
 
-declare global {
-  // eslint-disable-next-line no-var
-  var mongooseCache: CachedConnection | undefined;
-}
-
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
@@ -16,12 +11,16 @@ interface CachedConnection {
   promise: Promise<typeof mongoose> | null;
 }
 
+// Create a properly typed global reference
+const globalForMongoose = globalThis as unknown as {
+  mongooseCache: CachedConnection | undefined;
+};
 
 // Initialize the cache
-const cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
+const cached: CachedConnection = globalForMongoose.mongooseCache || { conn: null, promise: null };
 
-if (!global.mongooseCache) {
-  global.mongooseCache = cached;
+if (!globalForMongoose.mongooseCache) {
+  globalForMongoose.mongooseCache = cached;
 }
 
 async function connectToDatabase(): Promise<typeof mongoose> {
