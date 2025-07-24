@@ -65,38 +65,14 @@ const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left side - Branding */}
-      <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] flex flex-col items-center justify-center p-8 text-white">
-        <div className="relative">
-          <center>
-            <h1
-              className="text-3xl font-bold"
-              style={{
-                fontFamily: "Poupin, sans-serif",
-                color: "#FFE310",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <strong>Meeting&apos;s over. I&apos;ve got the goods.</strong>
-              <br /> <br />
-              <span
-                className="font-normal"
-                style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)" }}
-              >
-                You? Just go be brilliant.
-              </span>
-            </h1>
-          </center>
-        </div>
-        <div className="relative">
-          <Image
-            src="/images/pose_1.png"
-            alt="Heidi Pose 1"
-            width={500}
-            height={100}
-          />
-        </div>
-      </div>
+      <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] relative">
+              <Image
+                src="/images/login_img.png"
+                alt="Heidi Pose 1"
+                fill
+                className="object-cover"
+              />
+            </div>
 
       {/* Right side - Form */}
       <div className="flex-1 flex items-center justify-center p-8 bg-white">

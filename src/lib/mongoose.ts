@@ -45,10 +45,16 @@ async function connectToDatabase(): Promise<typeof mongoose> {
     cached.conn = await cached.promise;
     console.log('✅ Connected to MongoDB successfully');
     return cached.conn;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('❌ MongoDB connection error:', error);
     cached.promise = null;
-    throw error;
+    
+    // Type guard to handle the error properly
+    if (error instanceof Error) {
+      throw new Error(`MongoDB connection failed: ${error.message}`);
+    } else {
+      throw new Error('MongoDB connection failed: Unknown error');
+    }
   }
 }
 
