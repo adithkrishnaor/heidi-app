@@ -15,8 +15,8 @@ interface CachedConnection {
 declare global {
   var mongooseCache: CachedConnection | undefined;
 }
-
-const cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
+  
+let cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;

@@ -171,9 +171,8 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    
+  // Separate form submission logic without event dependency
+  const submitForm = async () => {
     // Clear any existing alerts
     setAlert(null);
 
@@ -234,6 +233,11 @@ const Signup = () => {
     }
   };
 
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    await submitForm();
+  };
+
   const handleSocialSignup = async (provider: string) => {
     setAlert(null);
     showAlert('warning', `${provider} signup is not yet implemented`);
@@ -244,7 +248,7 @@ const Signup = () => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !isLoading) {
-      handleSubmit(e as any);
+      submitForm();
     }
   };
 
