@@ -13,6 +13,7 @@ interface CachedConnection {
 
 // Global is used here to maintain a cached connection across hot reloads
 declare global {
+  // eslint-disable-next-line no-var
   var mongooseCache: CachedConnection | undefined;
 }
   
