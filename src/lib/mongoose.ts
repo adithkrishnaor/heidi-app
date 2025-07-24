@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
 
+declare global {
+  // eslint-disable-next-line no-var
+  var mongooseCache: CachedConnection | undefined;
+}
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
@@ -11,11 +16,6 @@ interface CachedConnection {
   promise: Promise<typeof mongoose> | null;
 }
 
-// Type the global object properly to avoid 'any' errors
-declare global {
-  // eslint-disable-next-line no-var, @typescript-eslint/no-explicit-any
-  var mongooseCache: CachedConnection | undefined;
-}
 
 // Initialize the cache
 const cached: CachedConnection = global.mongooseCache || { conn: null, promise: null };

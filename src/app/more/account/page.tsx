@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff, User } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const AccountPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("more/account");
@@ -62,11 +63,13 @@ const AccountPage: React.FC = () => {
             <div className="flex-shrink-0">
               <div className="relative">
                 <div className="w-32 h-32 rounded-full bg-gray-100 border-4 border-white shadow-lg overflow-hidden">
-                  <img
+                  <Image
                     src="/api/placeholder/128/128"
                     alt="Profile"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
+                    width={128}
+                    height={128}
+                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                       (e.currentTarget as HTMLImageElement).style.display = "none";
                       if (e.currentTarget.nextElementSibling) {
                         (
