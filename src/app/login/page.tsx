@@ -5,10 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface LoginProps {
-  onLogin?: () => void;
-}
-
 interface AlertProps {
   type: 'success' | 'error' | 'warning';
   message: string;
@@ -47,8 +43,9 @@ const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
     </div>
   );
 };
- 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+
+// This is now a standalone page component (no props)
+export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -188,11 +185,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         
         // Delay navigation to show success message
         setTimeout(() => {
-          if (onLogin) {
-            onLogin();
-          } else {
-            router.push('/home');
-          }
+          router.push('/home');
         }, 1500);
         
       } else {
@@ -221,13 +214,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     
     // TODO: Implement actual social login
     console.log(`Login with ${provider}`);
-    
-    // Simulate social login for demo
-    // if (onLogin) {
-    //   onLogin();
-    // } else {
-    //   router.push('/home');
-    // }
   };
 
   const handleForgotPassword = () => {
@@ -408,6 +394,4 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}
