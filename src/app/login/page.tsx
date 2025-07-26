@@ -5,6 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+interface LoginProps {
+  onLogin?: () => void;
+}
+
 interface AlertProps {
   type: 'success' | 'error' | 'warning';
   message: string;
@@ -44,8 +48,7 @@ const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
   );
 };
 
-// This is now a standalone page component (no props)
-export default function LoginPage() {
+const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -183,9 +186,14 @@ export default function LoginPage() {
         
         showAlert('success', 'Login successful! Redirecting...');
         
-        // Delay navigation to show success message
+        // Call the onLogin callback if provided (for parent state management)
         setTimeout(() => {
-          router.push('/home');
+          if (onLogin) {
+            onLogin();
+          } else {
+            // Direct navigation to home if no callback provided
+            router.push('/home');
+          }
         }, 1500);
         
       } else {
@@ -394,4 +402,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginForm;
