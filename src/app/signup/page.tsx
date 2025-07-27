@@ -177,7 +177,6 @@ const Signup = () => {
     setAlert(null);
 
     if (!validateForm()) {
-      showAlert('error', 'Please fix the errors below before submitting');
       return;
     }
 

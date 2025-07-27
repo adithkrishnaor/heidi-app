@@ -37,23 +37,35 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const router = useRouter();
 
-  // Simplified navigation handler similar to navbar
+  // Single logout handler
+  const handleLogout = () => {
+    console.log("Logging out..."); // Debug log
+
+    // Clear all user data from localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userData");
+
+    // Clear session storage
+    sessionStorage.clear();
+
+    // Force redirect to login page
+    router.replace("/login"); // Use replace instead of push to prevent back navigation
+  };
+
+  // Updated navigation handler
   const handleNavClick = (page: string) => {
+    console.log("Navigation clicked:", page); // Debug log
+
+    // Handle logout specifically
+    if (page === "logout" || page === "login") {
+      handleLogout();
+      return;
+    }
+
     if (onNavigate) {
       onNavigate(page);
     } else {
-      // Handle special logout case
-      if (page === "logout") {
-        // Clear any stored user data/tokens
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("userToken");
-          localStorage.removeItem("userData");
-          sessionStorage.clear();
-        }
-        router.push("/login");
-        return;
-      }
-
       // Direct navigation based on page string
       router.push(`/${page}`);
     }
@@ -159,7 +171,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       ],
     },
     {
-      id: "login",
+      id: "logout", // Changed from "login" to "logout"
       label: "Logout",
       icon: <LogOut className="w-4 h-4" />,
       children: [],
@@ -197,6 +209,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
   };
 
   const handleItemClick = (item: SidebarItem) => {
+    console.log("Item clicked:", item.id); // Debug log
+
+    // Special handling for logout
+    if (item.id === "logout") {
+      handleLogout();
+      return;
+    }
+
     if (item.children && item.children.length > 0) {
       // Toggle expansion for parent items
       toggleExpanded(item.id);
@@ -218,12 +238,18 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
             active
               ? "bg-blue-50 text-blue-600 border-r-2 border-blue-600"
               : "text-gray-700"
-          } ${level > 0 ? "pl-8" : ""}`}
+          } ${level > 0 ? "pl-8" : ""} ${
+            item.id === "logout" ? "hover:bg-red-50 hover:text-red-600" : ""
+          }`}
           onClick={() => handleItemClick(item)}
         >
           <div className="flex items-center space-x-3">
             {level === 0 && (
-              <div className={`${active ? "text-blue-600" : "text-gray-500"}`}>
+              <div
+                className={`${
+                  active ? "text-blue-600" : "text-gray-500"
+                } ${item.id === "logout" ? "text-red-500" : ""}`}
+              >
                 {item.customIcon ? (
                   <Image
                     src={item.customIcon}
@@ -240,7 +266,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
             <span
               className={`text-sm font-medium ${
                 level > 0 ? "text-gray-600" : ""
-              }`}
+              } ${item.id === "logout" ? "text-red-600" : ""}`}
             >
               {item.label}
             </span>
@@ -282,9 +308,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       </div>
 
       {/* Navigation Items */}
-      <div className="py-4">
-        {sidebarData.map((item) => renderSidebarItem(item))}
-      </div>
+      <div className="py-4">{sidebarData.map((item) => renderSidebarItem(item))}</div>
     </div>
   );
 };

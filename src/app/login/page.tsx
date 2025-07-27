@@ -1,54 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, AlertCircle, CheckCircle, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface LoginProps {
-  onLogin?: () => void;
-}
-
-interface AlertProps {
-  type: 'success' | 'error' | 'warning';
-  message: string;
-  onClose: () => void;
-}
-
-const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
-  const alertStyles = {
-    success: 'bg-green-50 border-green-200 text-green-800',
-    error: 'bg-red-50 border-red-200 text-red-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800'
-  };
-
-  const iconStyles = {
-    success: 'text-green-400',
-    error: 'text-red-400',
-    warning: 'text-yellow-400'
-  };
-
-  return (
-    <div className={`border rounded-lg p-4 mb-4 ${alertStyles[type]} flex items-center justify-between`}>
-      <div className="flex items-center">
-        {type === 'success' ? (
-          <CheckCircle className={`w-5 h-5 mr-3 ${iconStyles[type]}`} />
-        ) : (
-          <AlertCircle className={`w-5 h-5 mr-3 ${iconStyles[type]}`} />
-        )}
-        <span className="text-sm font-medium">{message}</span>
-      </div>
-      <button
-        onClick={onClose}
-        className={`${iconStyles[type]} hover:opacity-75 transition-opacity`}
-      >
-        <X className="w-4 h-4" />
-      </button>
-    </div>
-  );
-};
-
-const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
+export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     emailOrPhone: "",
@@ -58,6 +15,15 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [alert, setAlert] = useState<{type: 'success' | 'error' | 'warning', message: string} | null>(null);
+
+  // Check if user is already logged in when login page loads
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      // User is already logged in, redirect to home
+      router.push('/home');
+    }
+  }, [router]);
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -115,6 +81,69 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const showAlert = (type: 'success' | 'error' | 'warning', message: string) => {
+    setAlert({ type, message });
+    if (type === 'success') {
+      setTimeout(() => setAlert(null), 5000);
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Clear any existing alerts
+    setAlert(null);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Call your actual API endpoint
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.emailOrPhone, // API expects 'email' field
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        showAlert('success', 'Login successful! Redirecting...');
+        
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          router.push('/home');
+        }, 1500);
+        
+      } else {
+        // Handle different types of errors based on your API response
+        if (response.status === 401) {
+          showAlert('error', 'Invalid email or password. Please try again.');
+        } else if (response.status === 400) {
+          showAlert('error', data.error || 'Please check your input and try again.');
+        } else if (response.status >= 500) {
+          showAlert('error', 'Server error. Please try again later.');
+        } else {
+          showAlert('error', data.error || 'Login failed. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      showAlert('error', 'Network error. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
@@ -147,72 +176,9 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
     }
   };
 
-  const showAlert = (type: 'success' | 'error' | 'warning', message: string) => {
-    setAlert({ type, message });
-    // Auto-hide success messages after 5 seconds
-    if (type === 'success') {
-      setTimeout(() => setAlert(null), 5000);
-    }
-  };
-
-  const handleSubmit = async () => {
-    // Clear any existing alerts
-    setAlert(null);
-
-    if (!validateForm()) {
-      showAlert('error', 'Please fix the errors below before submitting');
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.emailOrPhone,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        showAlert('success', 'Login successful! Redirecting...');
-        
-        // Call the onLogin callback if provided (for parent state management)
-        setTimeout(() => {
-          if (onLogin) {
-            onLogin();
-          } else {
-            // Direct navigation to home if no callback provided
-            router.push('/home');
-          }
-        }, 1500);
-        
-      } else {
-        // Handle different types of errors
-        if (response.status === 401) {
-          showAlert('error', 'Invalid email or password. Please try again.');
-        } else if (response.status === 400) {
-          showAlert('error', data.error || 'Please check your input and try again.');
-        } else if (response.status >= 500) {
-          showAlert('error', 'Server error. Please try again later.');
-        } else {
-          showAlert('error', data.error || 'Login failed. Please try again.');
-        }
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      showAlert('error', 'Network error. Please check your connection and try again.');
-    } finally {
-      setIsLoading(false);
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !isLoading) {
+      handleSubmit();
     }
   };
 
@@ -229,12 +195,6 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
     console.log("Forgot password clicked");
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading) {
-      handleSubmit();
-    }
-  };
-
   return (
     <div className="min-h-screen flex">
       {/* Left side - Form */}
@@ -244,11 +204,26 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
 
           {/* Alert Component */}
           {alert && (
-            <Alert
-              type={alert.type}
-              message={alert.message}
-              onClose={() => setAlert(null)}
-            />
+            <div className={`border rounded-lg p-4 mb-4 flex items-center justify-between ${
+              alert.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+              alert.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+              'bg-yellow-50 border-yellow-200 text-yellow-800'
+            }`}>
+              <div className="flex items-center">
+                {alert.type === 'success' ? (
+                  <CheckCircle className="w-5 h-5 mr-3 text-green-400" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 mr-3 text-red-400" />
+                )}
+                <span className="text-sm font-medium">{alert.message}</span>
+              </div>
+              <button
+                onClick={() => setAlert(null)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           )}
 
           <div className="space-y-6">
@@ -392,6 +367,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
       </div>
 
+      {/* Right side - Image */}
       <div className="flex-1 bg-gradient-to-br from-[#008DDF] to-[#B3F0FF] relative">
         <Image
           src="/images/login_img.png"
@@ -402,6 +378,4 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
       </div>
     </div>
   );
-};
-
-export default LoginForm;
+}

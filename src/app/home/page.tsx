@@ -7,16 +7,50 @@ import Sidebar from "../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState("home"); // Track current page
+  const [currentPage, setCurrentPage] = useState("home");
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    // Check authentication on page load
+    const userData = localStorage.getItem("user");
+
+    if (!userData) {
+      // Not authenticated - redirect to login
+      router.push("/login");
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+    } catch (error) {
+      console.error("Invalid user data:", error);
+      localStorage.removeItem("user");
+      router.push("/login");
+      return;
+    }
+
+    setIsLoading(false);
+  }, [router]);
 
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
-    // Add your navigation logic here (e.g., router.push, etc.)
     router.push(`/${page}`);
-
-    console.log(`Navigating to: ${page}`);
   };
+
+  // Show loading while checking auth
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -27,10 +61,11 @@ const Home: React.FC = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Heidi – Welcome Message
+            Welcome Back to Heidi!
           </h2>
           <p className="text-blue-500 font-medium">
-            Hello Name! Here&apos;s your day overview
+            Hello {user?.email?.split("@")[0]}! Here&apos;s your dashboard
+            overview
           </p>
         </div>
 
