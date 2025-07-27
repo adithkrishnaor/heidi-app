@@ -6,9 +6,18 @@ import Image from "next/image";
 import Sidebar from "../../components/Sidebar";
 import { useRouter } from "next/navigation";
 
+// Define proper user type instead of using 'any'
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  loginTime?: string;
+  [key: string]: unknown; // For any additional properties
+}
+
 const Home: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("home");
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null); // Replace 'any' with 'User | null'
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -23,7 +32,7 @@ const Home: React.FC = () => {
     }
 
     try {
-      const parsedUser = JSON.parse(userData);
+      const parsedUser: User = JSON.parse(userData); // Type the parsed user
       setUser(parsedUser);
     } catch (error) {
       console.error("Invalid user data:", error);
@@ -64,7 +73,7 @@ const Home: React.FC = () => {
             Welcome Back to Heidi!
           </h2>
           <p className="text-blue-500 font-medium">
-            Hello {user?.email?.split("@")[0]}! Here&apos;s your dashboard
+            Hello {user.email.split("@")[0]}! Here&apos;s your dashboard
             overview
           </p>
         </div>
