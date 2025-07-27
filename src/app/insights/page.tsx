@@ -121,7 +121,7 @@ const InsightsPage: React.FC = () => {
                     
                     <div className="bg-blue-50 rounded-lg p-4 mb-6">
                         <p className="text-gray-700 italic text-lg leading-relaxed">
-                            "{data.summary}"
+                            &quot;{data.summary}&quot;
                         </p>
                     </div>
 
