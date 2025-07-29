@@ -11,6 +11,14 @@ interface AlertProps {
   onClose: () => void;
 }
 
+interface UpdateUserData {
+  email: string;
+  name: string;
+  phone: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
   const alertStyles = {
     success: "bg-green-50 border-green-200 text-green-800",
@@ -172,7 +180,7 @@ const AccountPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const updateData: any = {
+      const updateData: UpdateUserData = {
         email: formData.email,
         name: formData.name,
         phone: formData.phone,

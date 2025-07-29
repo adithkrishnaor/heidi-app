@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '../../../../lib/mongoose';
 import { User } from '../../../../../models/User';
 
+interface UpdateUserData {
+  name?: string;
+  phone?: string;
+  password?: string;
+}
+
 // GET handler - Get user account data
 export async function GET(request: NextRequest) {
   try {
@@ -84,7 +90,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Prepare update data
-    const updateData: any = {};
+    const updateData: UpdateUserData = {};
     
     if (name !== undefined && name.trim() !== '') {
       updateData.name = name.trim();
