@@ -1,14 +1,60 @@
 "use client";
-import React, { useState } from "react";
-import { Eye, EyeOff, User } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Eye, EyeOff, User, CheckCircle, AlertCircle, X } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
+interface AlertProps {
+  type: "success" | "error" | "warning";
+  message: string;
+  onClose: () => void;
+}
+
+const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
+  const alertStyles = {
+    success: "bg-green-50 border-green-200 text-green-800",
+    error: "bg-red-50 border-red-200 text-red-800",
+    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
+  };
+
+  const iconStyles = {
+    success: "text-green-400",
+    error: "text-red-400",
+    warning: "text-yellow-400",
+  };
+
+  return (
+    <div
+      className={`border rounded-lg p-4 mb-4 ${alertStyles[type]} flex items-center justify-between`}
+    >
+      <div className="flex items-center">
+        {type === "success" ? (
+          <CheckCircle className={`w-5 h-5 mr-3 ${iconStyles[type]}`} />
+        ) : (
+          <AlertCircle className={`w-5 h-5 mr-3 ${iconStyles[type]}`} />
+        )}
+        <span className="text-sm font-medium">{message}</span>
+      </div>
+      <button
+        onClick={onClose}
+        className={`${iconStyles[type]} hover:opacity-75 transition-opacity`}
+      >
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
+};
 
 const AccountPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("more/account");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [alert, setAlert] = useState<
+    { type: "success" | "error" | "warning"; message: string } | null
+  >(null);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -19,6 +65,43 @@ const AccountPage: React.FC = () => {
 
   const router = useRouter();
 
+  // Load user data on component mount
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userData = localStorage.getItem("user");
+        if (!userData) {
+          router.push("/login");
+          return;
+        }
+
+        const user = JSON.parse(userData);
+        const response = await fetch(
+          `/api/auth/account?email=${encodeURIComponent(user.email)}`
+        );
+        const data = await response.json();
+
+        if (data.success) {
+          setFormData((prev) => ({
+            ...prev,
+            name: data.user.name || "",
+            email: data.user.email || "",
+            phone: data.user.phone || "", 
+          }));
+        } else {
+          showAlert("error", "Failed to load user data");
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+        showAlert("error", "Failed to load user data");
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    loadUserData();
+  }, [router]);
+
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
 
@@ -26,6 +109,7 @@ const AccountPage: React.FC = () => {
     if (page === "logout") {
       // Clear any stored user data/tokens
       if (typeof window !== "undefined") {
+        localStorage.removeItem("user");
         localStorage.removeItem("userToken");
         localStorage.removeItem("userData");
         sessionStorage.clear();
@@ -43,12 +127,112 @@ const AccountPage: React.FC = () => {
       ...prev,
       [field]: value,
     }));
+
+    // Clear alert when user starts typing
+    if (alert) {
+      setAlert(null);
+    }
   };
 
-  const handleSave = () => {
-    console.log("Saving account data:", formData);
-    // Handle save logic here
+  const showAlert = (
+    type: "success" | "error" | "warning",
+    message: string
+  ) => {
+    setAlert({ type, message });
+    if (type === "success") {
+      setTimeout(() => setAlert(null), 5000);
+    }
   };
+
+  const handleSave = async () => {
+    setAlert(null);
+
+    // Basic validation
+    if (!formData.name.trim()) {
+      showAlert("error", "Name is required");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      showAlert("error", "Email is required");
+      return;
+    }
+
+    // Password validation only if password is provided
+    if (formData.password && formData.password.length < 6) {
+      showAlert("error", "Password must be at least 6 characters long");
+      return;
+    }
+
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      showAlert("error", "Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const updateData: any = {
+        email: formData.email,
+        name: formData.name,
+        phone: formData.phone,
+      };
+
+      // Only include password if it's provided
+      if (formData.password.trim() !== "") {
+        updateData.password = formData.password;
+        updateData.confirmPassword = formData.confirmPassword;
+      }
+
+      const response = await fetch("/api/auth/account", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Update localStorage with new user data
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        const updatedUser = {
+          ...currentUser,
+          ...data.user,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        showAlert("success", "Account updated successfully!");
+
+        // Clear password fields after successful update
+        setFormData((prev) => ({
+          ...prev,
+          password: "",
+          confirmPassword: "",
+        }));
+      } else {
+        showAlert("error", data.error || "Failed to update account");
+      }
+    } catch (error) {
+      console.error("Error updating account:", error);
+      showAlert("error", "Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Show loading while fetching user data
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading account data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -58,6 +242,15 @@ const AccountPage: React.FC = () => {
       {/* Main Content with left margin to account for fixed sidebar */}
       <main className="ml-64 px-6 py-6">
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          {/* Alert Component */}
+          {alert && (
+            <Alert
+              type={alert.type}
+              message={alert.message}
+              onClose={() => setAlert(null)}
+            />
+          )}
+
           <div className="flex items-start space-x-8">
             {/* Profile Picture */}
             <div className="flex-shrink-0">
@@ -69,7 +262,9 @@ const AccountPage: React.FC = () => {
                     className="w-full h-full object-cover"
                     width={128}
                     height={128}
-                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    onError={(
+                      e: React.SyntheticEvent<HTMLImageElement, Event>
+                    ) => {
                       (e.currentTarget as HTMLImageElement).style.display = "none";
                       if (e.currentTarget.nextElementSibling) {
                         (
@@ -108,14 +303,15 @@ const AccountPage: React.FC = () => {
               {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
+                  Name *
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Here"
+                  placeholder="Enter your name"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full text-black px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  disabled={isLoading}
                 />
               </div>
 
@@ -126,46 +322,53 @@ const AccountPage: React.FC = () => {
                 </label>
                 <input
                   type="tel"
-                  placeholder="Enter Here"
+                  placeholder="Enter your phone number"
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full text-black px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  disabled={isLoading}
                 />
               </div>
 
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                  Email *
                 </label>
                 <input
                   type="email"
-                  placeholder="Enter Here"
+                  placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full text-black px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors bg-gray-50"
+                  disabled={true} // Email should not be editable
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Email cannot be changed
+                </p>
               </div>
 
               {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  New Password (leave blank to keep current)
                 </label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="********"
+                    placeholder="Enter new password"
                     value={formData.password}
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
                     }
-                    className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 text-black py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    disabled={isLoading}
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -179,22 +382,24 @@ const AccountPage: React.FC = () => {
               {/* Confirm Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password
+                  Confirm New Password
                 </label>
                 <div className="relative">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="********"
+                    placeholder="Confirm new password"
                     value={formData.confirmPassword}
                     onChange={(e) =>
                       handleInputChange("confirmPassword", e.target.value)
                     }
-                    className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 text-black py-3 pr-12 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    disabled={isLoading}
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -209,9 +414,17 @@ const AccountPage: React.FC = () => {
               <div className="pt-4">
                 <button
                   onClick={handleSave}
-                  className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
                 >
-                  Save
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
                 </button>
               </div>
             </div>
