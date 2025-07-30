@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Plus, Trash2, Save, GripVertical } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
@@ -23,7 +23,8 @@ interface TemplateFormData {
   isFavorite: boolean;
 }
 
-const CreateEditTemplatePage: React.FC = () => {
+// Create a separate component for the search params logic
+const CreateEditTemplateContent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("templates");
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -453,6 +454,25 @@ const CreateEditTemplatePage: React.FC = () => {
         </div>
       </main>
     </div>
+  );
+};
+
+// Loading component for Suspense
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
+
+// Main component wrapped in Suspense
+const CreateEditTemplatePage: React.FC = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <CreateEditTemplateContent />
+    </Suspense>
   );
 };
 
