@@ -27,12 +27,13 @@ const MeetingsPage: React.FC = () => {
   const [selectedMeeting, setSelectedMeeting] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState("meetings");
   const router = useRouter();
+  
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
     router.push(`/${page}`);
-
     console.log(`Navigating to: ${page}`);
   };
+
   // Sample data
   const meetings: Meeting[] = Array(10)
     .fill(null)
@@ -123,94 +124,96 @@ const MeetingsPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex">
       <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left Panel - Meeting History/Recordings */}
-          <div className="col-span-5">
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              {/* Tab Navigation */}
-              <div className="flex">
-                <button
-                  onClick={() => setActiveTab("history")}
-                  className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                    activeTab === "history"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Meeting History
-                </button>
-                <button
-                  onClick={() => setActiveTab("recordings")}
-                  className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                    activeTab === "recordings"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  Recordings
-                </button>
-              </div>
+      {/* Main Content - Properly aligned with margin to account for sidebar */}
+      <main className="flex-1 ml-64 px-6 py-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left Panel - Meeting History/Recordings */}
+            <div className="col-span-5">
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                {/* Tab Navigation */}
+                <div className="flex">
+                  <button
+                    onClick={() => setActiveTab("history")}
+                    className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                      activeTab === "history"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    Meeting History
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("recordings")}
+                    className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                      activeTab === "recordings"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    Recordings
+                  </button>
+                </div>
 
-              {/* Content */}
-              <div className="h-96 overflow-y-auto">
-                {activeTab === "history"
-                  ? renderMeetingHistory()
-                  : renderRecordings()}
+                {/* Content */}
+                <div className="h-96 overflow-y-auto">
+                  {activeTab === "history"
+                    ? renderMeetingHistory()
+                    : renderRecordings()}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Right Panel */}
-          <div className="col-span-7">
-            {selectedMeeting && activeTab === "history" ? (
-              /* Meeting Transcript */
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 h-96">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Meeting Transcript
-                </h3>
-                <div className="h-80 overflow-y-auto space-y-4">
-                  {transcriptData.map((item, idx) => (
-                    <div key={idx} className="flex space-x-3">
-                      <span className="text-sm font-medium text-gray-600 w-12 flex-shrink-0">
-                        {item.time}
-                      </span>
-                      <p className="text-sm text-gray-700 leading-relaxed">
-                        {item.text}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              /* New/Join Meeting Cards */
-              <div className="grid grid-cols-2 gap-6">
-                {/* New Meeting */}
-                <div className="group cursor-pointer">
-                  <div className="bg-white rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-200 border border-gray-200">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
-                      <Video className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      New Meeting
-                    </h3>
+            {/* Right Panel */}
+            <div className="col-span-7">
+              {selectedMeeting && activeTab === "history" ? (
+                /* Meeting Transcript */
+                <div className="bg-white rounded-2xl border border-gray-200 p-6 h-96">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Meeting Transcript
+                  </h3>
+                  <div className="h-80 overflow-y-auto space-y-4">
+                    {transcriptData.map((item, idx) => (
+                      <div key={idx} className="flex space-x-3">
+                        <span className="text-sm font-medium text-gray-600 w-12 flex-shrink-0">
+                          {item.time}
+                        </span>
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          {item.text}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {/* Join Meeting */}
-                <div className="group cursor-pointer">
-                  <div className="bg-white rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-200 border border-gray-200">
-                    <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
-                      <Plus className="w-6 h-6 text-white" />
+              ) : (
+                /* New/Join Meeting Cards */
+                <div className="grid grid-cols-2 gap-6">
+                  {/* New Meeting */}
+                  <div className="group cursor-pointer">
+                    <div className="bg-white rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-200 border border-gray-200">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+                        <Video className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        New Meeting
+                      </h3>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      Join Meeting
-                    </h3>
+                  </div>
+
+                  {/* Join Meeting */}
+                  <div className="group cursor-pointer">
+                    <div className="bg-white rounded-2xl p-8 text-center hover:shadow-lg transition-all duration-200 border border-gray-200">
+                      <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+                        <Plus className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        Join Meeting
+                      </h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </main>
