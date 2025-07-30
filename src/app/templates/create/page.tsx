@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, ArrowLeft, Save, GripVertical } from "lucide-react";
+import { Plus, Trash2, Save, GripVertical } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 
@@ -26,7 +26,6 @@ interface TemplateFormData {
 const CreateEditTemplatePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("templates");
   const [isEditing, setIsEditing] = useState(false);
-  const [templateId, setTemplateId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   
   const router = useRouter();
@@ -81,7 +80,6 @@ const CreateEditTemplatePage: React.FC = () => {
     // Check if we're editing (URL contains template ID)
     if (params?.id) {
       setIsEditing(true);
-      setTemplateId(params.id as string);
       loadTemplateData(params.id as string);
     }
     
@@ -95,6 +93,8 @@ const CreateEditTemplatePage: React.FC = () => {
   const loadTemplateData = async (id: string, isCopy: boolean = false) => {
     // In a real app, this would fetch from an API
     // For now, we'll simulate loading template data
+    console.log(`Loading template with ID: ${id}`); // Use the id parameter
+    
     const mockTemplate = {
       title: isCopy ? "Copy of Sales Meeting Template" : "Sales Meeting Template",
       description: "Structured template for sales discussions and follow-ups",
@@ -143,17 +143,39 @@ const CreateEditTemplatePage: React.FC = () => {
 
   const handleNavigation = (page: string) => {
     setCurrentPage(page);
+    
+    // Handle navigation similar to other pages
+    if (page === "logout") {
+      // Clear any stored user data/tokens
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("user");
+        localStorage.removeItem("userToken");
+        localStorage.removeItem("userData");
+        sessionStorage.clear();
+      }
+      router.push("/login");
+      return;
+    }
+
+    // Navigate to the appropriate route
     router.push(`/${page}`);
   };
 
-  const handleInputChange = (field: keyof TemplateFormData, value: any) => {
+  const handleInputChange = (
+    field: keyof TemplateFormData, 
+    value: string | boolean
+  ) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
-  const handleSectionChange = (sectionId: string, field: keyof TemplateSection, value: any) => {
+  const handleSectionChange = (
+    sectionId: string, 
+    field: keyof TemplateSection, 
+    value: string | boolean | number
+  ) => {
     setFormData(prev => ({
       ...prev,
       sections: prev.sections.map(section =>
@@ -212,18 +234,20 @@ const CreateEditTemplatePage: React.FC = () => {
     }
   };
 
-
+  const handleCancel = () => {
+    router.push("/templates");
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
+      {/* Fixed Sidebar */}
       <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
 
-      {/* Main Content */}
-      <main className="flex-1 ml-64 px-6 py-6">
+      {/* Main Content with left margin to account for fixed sidebar */}
+      <main className="ml-64 px-6 py-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4 mb-8">
-            
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
                 {isEditing ? "Edit Template" : "Create New Template"}
@@ -247,9 +271,6 @@ const CreateEditTemplatePage: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Template Name *
                     </label>
-                    
-                    {/* Template Name Input */}
-                    
                     <input
                       type="text"
                       value={formData.title}
@@ -262,7 +283,6 @@ const CreateEditTemplatePage: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Category *
                     </label>
-                    {/* Category Select */}
                     <select 
                       value={formData.category}
                       onChange={(e) => handleInputChange("category", e.target.value)}
@@ -280,7 +300,6 @@ const CreateEditTemplatePage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Description
                   </label>
-                  {/* Description Textarea */}
                   <textarea
                     value={formData.description}
                     onChange={(e) => handleInputChange("description", e.target.value)}
@@ -305,7 +324,7 @@ const CreateEditTemplatePage: React.FC = () => {
                 </div>
                 
                 <div className="space-y-4">
-                  {formData.sections.map((section, index) => (
+                  {formData.sections.map((section) => (
                     <div key={section.id} className="bg-gray-50 rounded-lg p-6">
                       <div className="flex items-start gap-4">
                         <div className="flex-shrink-0 mt-2">
@@ -315,7 +334,6 @@ const CreateEditTemplatePage: React.FC = () => {
                         <div className="flex-1 space-y-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">
-                              {/* Section Title Input */}
                               <input
                                 type="text"
                                 value={section.title}
@@ -323,10 +341,9 @@ const CreateEditTemplatePage: React.FC = () => {
                                 className="font-medium text-black bg-transparent border-none outline-none focus:bg-white focus:border focus:border-gray-200 focus:rounded px-2 py-1"
                               />
                               <div className="flex items-center gap-2">
-                                {/* Section Type Select */}
                                 <select
                                   value={section.type}
-                                  onChange={(e) => handleSectionChange(section.id, "type", e.target.value)}
+                                  onChange={(e) => handleSectionChange(section.id, "type", e.target.value as TemplateSection['type'])}
                                   className="text-xs text-black border border-gray-200 rounded px-2 py-1 focus:ring-1 focus:ring-blue-500 focus:border-transparent outline-none"
                                 >
                                   {sectionTypes.map(type => (
@@ -352,7 +369,6 @@ const CreateEditTemplatePage: React.FC = () => {
                             </button>
                           </div>
                           
-                          {/* Section Description Textarea */}
                           <textarea
                             value={section.description}
                             onChange={(e) => handleSectionChange(section.id, "description", e.target.value)}
@@ -423,7 +439,14 @@ const CreateEditTemplatePage: React.FC = () => {
                   <Save className="w-4 h-4" />
                   {isSaving ? "Saving..." : (isEditing ? "Update Template" : "Create Template")}
                 </button>
-
+                
+                <button 
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
