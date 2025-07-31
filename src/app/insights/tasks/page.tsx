@@ -312,7 +312,7 @@ const InsightsDetailedPage: React.FC = () => {
                                     <MessageCircle className="w-4 h-4 text-blue-500 mt-0.5" />
                                     <div>
                                         <span className="text-sm font-medium text-blue-800">Heidi says:</span>
-                                        <p className="text-sm text-blue-700 mt-1">"{insight.heidiComment}"</p>
+                                        <p className="text-sm text-blue-700 mt-1">&quot;{insight.heidiComment}&quot;</p>
                                     </div>
                                 </div>
                             </div>

@@ -85,9 +85,6 @@ const InsightsPage: React.FC = () => {
         console.log(`Navigating to: ${page}`);
     };
 
-    const handleViewFullAnalysis = () => {
-        router.push('/insights/detailed');
-    };
 
     useEffect(() => {
         fetchHeidiOverview().then((res) => {
@@ -168,16 +165,14 @@ const InsightsPage: React.FC = () => {
                     {/* Heidi's Observation and Suggestion */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div className="bg-blue-50 rounded-lg p-4">
-                            <h4 className="font-semibold text-gray-800 mb-2">Heidi's Observation:</h4>
+                            <h4 className="font-semibold text-gray-800 mb-2">Heidi&apos;s Observation:</h4>
                             <p className="text-gray-700 italic">"{data.summary}"</p>
                         </div>
                         <div className="bg-green-50 rounded-lg p-4">
-                            <h4 className="font-semibold text-gray-800 mb-2">Heidi's Suggestion:</h4>
-                            <p className="text-gray-700 italic">"{data.heidiAdvice}"</p>
+                            <h4 className="font-semibold text-gray-800 mb-2">Heidi&apos;s Suggestion:</h4>
+                            <p className="text-gray-700 italic">&quot;{data.heidiAdvice}&quot;</p>
                         </div>
                     </div>
-
-                    
                 </section>
 
                 {/* Global Metrics Dashboard */}
