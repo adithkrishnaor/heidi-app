@@ -134,7 +134,7 @@ const InsightsPage: React.FC = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <Brain className="w-6 h-6 text-blue-500 mr-2" />
-                                <span className="text-2xl font-bold text-gray-900">Heidi's Insights Overview</span>
+                                <span className="text-2xl font-bold text-gray-900">Heidi&apos;s Insights Overview</span>
                             </div>
                         </div>
                         
@@ -166,7 +166,7 @@ const InsightsPage: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div className="bg-blue-50 rounded-lg p-4">
                             <h4 className="font-semibold text-gray-800 mb-2">Heidi&apos;s Observation:</h4>
-                            <p className="text-gray-700 italic">"{data.summary}"</p>
+                            <p className="text-gray-700 italic">&quot;{data.summary}&quot;</p>
                         </div>
                         <div className="bg-green-50 rounded-lg p-4">
                             <h4 className="font-semibold text-gray-800 mb-2">Heidi&apos;s Suggestion:</h4>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../../../components/Sidebar";
 import { 
@@ -105,14 +105,27 @@ const InsightsDetailedPage: React.FC = () => {
         contact: 'All',
         date: 'All'
     });
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleNavigation = (page: string) => {
         setCurrentPage(page);
+        
+        // Handle navigation similar to other pages
+        if (page === "logout") {
+            // Clear any stored user data/tokens
+            if (typeof window !== "undefined") {
+                localStorage.removeItem("user");
+                localStorage.removeItem("userToken");
+                localStorage.removeItem("userData");
+                sessionStorage.clear();
+            }
+            router.push("/login");
+            return;
+        }
+
+        // Navigate to the appropriate route
         router.push(`/${page}`);
     };
-
-
 
     const handleChatWithHeidi = (insightId: string) => {
         // Implement chat with Heidi functionality
@@ -140,7 +153,7 @@ const InsightsDetailedPage: React.FC = () => {
         );
     };
 
-    const applyFilters = () => {
+    const applyFilters = useCallback(() => {
         let filtered = insights;
 
         if (filters.type !== 'All') {
@@ -154,11 +167,30 @@ const InsightsDetailedPage: React.FC = () => {
         }
 
         setFilteredInsights(filtered);
+    }, [insights, filters]);
+
+    const loadInsights = async () => {
+        setIsLoading(true);
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            // In a real app, this would fetch from an API
+            setInsights(mockInsights);
+        } catch (error) {
+            console.error('Error loading insights:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
         applyFilters();
-    }, [filters, insights]);
+    }, [applyFilters]);
+
+    // Load insights on component mount
+    useEffect(() => {
+        loadInsights();
+    }, []);
 
     const getTypeIcon = (type: InsightType) => {
         switch (type) {
@@ -193,7 +225,7 @@ const InsightsDetailedPage: React.FC = () => {
         }
     };
 
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="min-h-screen bg-gray-50">
                 <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />
@@ -219,7 +251,6 @@ const InsightsDetailedPage: React.FC = () => {
             <div className="ml-64 p-6">
                 {/* Header */}
                 <div className="mb-6">
-
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">Detailed Insights Analysis</h1>
                     <p className="text-gray-600">
                         All insights extracted from meetings with filtering and management options
@@ -237,7 +268,7 @@ const InsightsDetailedPage: React.FC = () => {
                         <select
                             value={filters.type}
                             onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                            className="border border-gray-300 rounded px-3 py-1 text-sm"
+                            className="border border-gray-300 rounded px-3 py-1 text-sm text-black"
                         >
                             <option value="All">All Types</option>
                             <option value="Opportunity">Opportunities</option>
@@ -248,7 +279,7 @@ const InsightsDetailedPage: React.FC = () => {
                         <select
                             value={filters.status}
                             onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                            className="border border-gray-300 rounded px-3 py-1 text-sm"
+                            className="border border-gray-300 rounded px-3 py-1 text-sm text-black"
                         >
                             <option value="All">All Status</option>
                             <option value="To Do">To Do</option>
@@ -259,7 +290,7 @@ const InsightsDetailedPage: React.FC = () => {
                         <select
                             value={filters.contact}
                             onChange={(e) => setFilters(prev => ({ ...prev, contact: e.target.value }))}
-                            className="border border-gray-300 rounded px-3 py-1 text-sm"
+                            className="border border-gray-300 rounded px-3 py-1 text-sm text-black"
                         >
                             <option value="All">All Contacts</option>
                             <option value="John Smith">John Smith</option>
@@ -316,7 +347,8 @@ const InsightsDetailedPage: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-{/* Insight Details */}
+
+                            {/* Insight Details */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                                 <div className="flex items-center gap-2">
                                     <User className="w-4 h-4 text-gray-400" />
@@ -339,14 +371,15 @@ const InsightsDetailedPage: React.FC = () => {
                                     <select
                                         value={insight.status}
                                         onChange={(e) => handleStatusChange(insight.id, e.target.value as TaskStatus)}
-                                        className="text-sm border border-gray-300 rounded px-2 py-1"
+                                        className="text-sm text-black border border-gray-300 rounded px-2 py-1"
                                     >
                                         <option value="To Do">To Do</option>
                                         <option value="In Progress">In Progress</option>
                                         <option value="Done">Done</option>
                                     </select>
                                 </div>
-                                </div>
+                            </div>
+
                             {/* Tags */}
                             <div className="flex items-center gap-2 mb-4">
                                 <span className="text-sm text-gray-600">Tags:</span>
@@ -364,7 +397,7 @@ const InsightsDetailedPage: React.FC = () => {
                                     <select
                                         value={insight.assignedTo}
                                         onChange={(e) => handleAssignTask(insight.id, e.target.value as 'Me' | 'Teammate')}
-                                        className="text-sm border border-gray-300 rounded px-2 py-1"
+                                        className="text-sm text-black border border-gray-300 rounded px-2 py-1"
                                     >
                                         <option value="Me">Me</option>
                                         <option value="Teammate">Teammate</option>
@@ -476,4 +509,3 @@ const InsightsDetailedPage: React.FC = () => {
 
 export default InsightsDetailedPage;
 
-                            
