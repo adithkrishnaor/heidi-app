@@ -2,7 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../../components/Sidebar";
-import { TrendingUp, Brain, Target, AlertTriangle, Star, Activity } from "lucide-react";
+import { 
+    TrendingUp, 
+    Brain, 
+    Target,  
+    Activity,
+    Calendar,
+    Users,
+    BarChart3,
+} from "lucide-react";
 
 type HeidiOverviewData = {
     summary: string;
@@ -11,17 +19,24 @@ type HeidiOverviewData = {
     risks: string[];
     highlights: string[];
     pulseScore: number;
+    trustScore: number;
     trends: string[];
+    totalInsights: number;
+    opportunitiesPercent: number;
+    risksPercent: number;
+    followUpsPercent: number;
+    engagementTrend: string;
+    insightsActioned: number;
+    heidiAdvice: string;
 };
 
 const fetchHeidiOverview = async (): Promise<HeidiOverviewData> => {
     // Placeholder: Replace with your NLP API call
     return {
-        summary:
-            "Looks like your strategic game is strong, but there's room to spice things up. Let's turn those insights into action.",
+        summary: "Momentum is positive but action speed is crucial.",
         suggestions: [
+            "Prioritize closing verbal commitments faster.",
             "Reach out to dormant leads — they're colder than your coffee.",
-            "Prioritize tasks marked 'urgent' before they start growing roots.",
             "Schedule that follow-up call before it becomes a ghost story.",
         ],
         nextSteps: [
@@ -40,13 +55,21 @@ const fetchHeidiOverview = async (): Promise<HeidiOverviewData> => {
             "Your question-to-statement ratio improved by 40%.",
             "Client satisfaction increased across all touchpoints.",
         ],
-        pulseScore: 78,
+        pulseScore: 82,
+        trustScore: 78,
         trends: [
+            "+5% compared to last month",
             "You're asking more questions (nice!).",
             "Follow-ups are lagging behind — let's fix that.",
             "Meeting participation is up 25% this month.",
-            "Response time to emails improved significantly.",
         ],
+        totalInsights: 17,
+        opportunitiesPercent: 64,
+        risksPercent: 24,
+        followUpsPercent: 12,
+        engagementTrend: "+5% compared to last month",
+        insightsActioned: 74,
+        heidiAdvice: "Momentum is strong, but consider quicker follow-ups for better results."
     };
 };
 
@@ -60,6 +83,10 @@ const InsightsPage: React.FC = () => {
         setCurrentPage(page);
         router.push(`/${page}`);
         console.log(`Navigating to: ${page}`);
+    };
+
+    const handleViewFullAnalysis = () => {
+        router.push('/insights/detailed');
     };
 
     useEffect(() => {
@@ -104,85 +131,120 @@ const InsightsPage: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Heidi Overview Section */}
-                <section className="bg-white rounded-xl shadow-sm p-6 mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center">
-                            <Brain className="w-6 h-6 text-blue-500 mr-2" />
-                            <span className="text-2xl font-bold text-gray-900">Heidi Overview</span>
+                {/* Heidi's Global Overview Section */}
+                <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                    <div className="border-b border-gray-200 pb-4 mb-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                                <Brain className="w-6 h-6 text-blue-500 mr-2" />
+                                <span className="text-2xl font-bold text-gray-900">Heidi's Insights Overview</span>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-blue-500" />
-                            <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
-                                Pulse: {data.pulseScore}
-                            </span>
+                        
+                        {/* Key Metrics Bar */}
+                        <div className="flex items-center gap-6 mt-4 text-sm">
+                            <div className="flex items-center gap-2">
+                                <span className="font-semibold text-gray-900">{data.totalInsights}</span>
+                                <span className="text-gray-600">insights analyzed</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span className="font-semibold text-gray-900">{data.opportunitiesPercent}%</span>
+                                <span className="text-gray-600">Opportunities</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <span className="font-semibold text-gray-900">{data.risksPercent}%</span>
+                                <span className="text-gray-600">Risks</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                <span className="font-semibold text-gray-900">{data.followUpsPercent}%</span>
+                                <span className="text-gray-600">Follow-ups</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                        <p className="text-gray-700 italic text-lg leading-relaxed">
-                            &quot;{data.summary}&quot;
-                        </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <OverviewBlock 
-                            title="Smart Suggestions" 
-                            items={data.suggestions} 
-                            icon={<Target className="w-5 h-5 text-green-500" />}
-                            bgColor="bg-green-50"
-                            borderColor="border-green-200"
-                        />
-                        <OverviewBlock 
-                            title="Next Steps" 
-                            items={data.nextSteps} 
-                            icon={<TrendingUp className="w-5 h-5 text-blue-500" />}
-                            bgColor="bg-blue-50"
-                            borderColor="border-blue-200"
-                        />
-                        <OverviewBlock 
-                            title="Risks & Opportunities" 
-                            items={data.risks} 
-                            icon={<AlertTriangle className="w-5 h-5 text-amber-500" />}
-                            bgColor="bg-amber-50"
-                            borderColor="border-amber-200"
-                        />
-                        <OverviewBlock 
-                            title="Highlights" 
-                            items={data.highlights} 
-                            icon={<Star className="w-5 h-5 text-purple-500" />}
-                            bgColor="bg-purple-50"
-                            borderColor="border-purple-200"
-                        />
-                        <OverviewBlock 
-                            title="Performance Trends" 
-                            items={data.trends} 
-                            icon={<Activity className="w-5 h-5 text-indigo-500" />}
-                            bgColor="bg-indigo-50"
-                            borderColor="border-indigo-200"
-                            className="md:col-span-2"
-                        />
+                    {/* Heidi's Observation and Suggestion */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div className="bg-blue-50 rounded-lg p-4">
+                            <h4 className="font-semibold text-gray-800 mb-2">Heidi's Observation:</h4>
+                            <p className="text-gray-700 italic">"{data.summary}"</p>
+                        </div>
+                        <div className="bg-green-50 rounded-lg p-4">
+                            <h4 className="font-semibold text-gray-800 mb-2">Heidi's Suggestion:</h4>
+                            <p className="text-gray-700 italic">"{data.heidiAdvice}"</p>
+                        </div>
                     </div>
+
+                    
                 </section>
 
-                {/* Additional Insights Section */}
+                {/* Global Metrics Dashboard */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    {/* Pulse Score */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900">Pulse Score Avg</h3>
+                            <Activity className="w-5 h-5 text-blue-500" />
+                        </div>
+                        <div className="text-3xl font-bold text-blue-600 mb-2">{data.pulseScore}/100</div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                                className="h-2 rounded-full bg-blue-500" 
+                                style={{ width: `${data.pulseScore}%` }}
+                            ></div>
+                        </div>
+                    </div>
+
+                    {/* Trust Score */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900">Trust Score Avg</h3>
+                            <Users className="w-5 h-5 text-green-500" />
+                        </div>
+                        <div className="text-3xl font-bold text-green-600 mb-2">{data.trustScore}/100</div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                                className="h-2 rounded-full bg-green-500" 
+                                style={{ width: `${data.trustScore}%` }}
+                            ></div>
+                        </div>
+                    </div>
+
+                    {/* Engagement Trend */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-gray-900">Engagement Trend</h3>
+                            <TrendingUp className="w-5 h-5 text-purple-500" />
+                        </div>
+                        <div className="text-2xl font-bold text-purple-600 mb-2">{data.engagementTrend}</div>
+                        <div className="text-sm text-gray-600">vs last month</div>
+                    </div>
+                </div>
+
+                {/* Additional Metrics */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Trust Score Breakdown */}
-                    <div className="bg-white rounded-xl shadow-sm p-6">
+                    {/* Insights Actioned */}
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                            <Activity className="w-5 h-5 text-blue-500 mr-2" />
-                            Trust Score Breakdown
+                            <BarChart3 className="w-5 h-5 text-indigo-500 mr-2" />
+                            Insights Actioned
                         </h3>
-                        <div className="space-y-4">
-                            <ScoreBar label="Communication Quality" score={82} color="bg-green-500" />
-                            <ScoreBar label="Follow-up Consistency" score={65} color="bg-yellow-500" />
-                            <ScoreBar label="Meeting Engagement" score={88} color="bg-green-500" />
-                            <ScoreBar label="Task Completion" score={75} color="bg-blue-500" />
+                        <div className="flex items-center gap-4">
+                            <div className="text-4xl font-bold text-indigo-600">{data.insightsActioned}%</div>
+                            <div className="text-gray-600">of insights followed up</div>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-3 mt-4">
+                            <div 
+                                className="h-3 rounded-full bg-indigo-500" 
+                                style={{ width: `${data.insightsActioned}%` }}
+                            ></div>
                         </div>
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-xl shadow-sm p-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                             <Target className="w-5 h-5 text-green-500 mr-2" />
                             Quick Actions
@@ -192,16 +254,19 @@ const InsightsPage: React.FC = () => {
                                 title="Schedule Follow-ups" 
                                 description="3 pending follow-ups need attention"
                                 action={() => handleNavigation('calendar')}
+                                icon={<Calendar className="w-4 h-4" />}
                             />
                             <QuickActionButton 
                                 title="Review Open Tasks" 
                                 description="7 tasks awaiting completion"
                                 action={() => handleNavigation('tasks')}
+                                icon={<Target className="w-4 h-4" />}
                             />
                             <QuickActionButton 
                                 title="Contact Management" 
                                 description="Update relationship status"
                                 action={() => handleNavigation('contacts')}
+                                icon={<Users className="w-4 h-4" />}
                             />
                         </div>
                     </div>
@@ -211,60 +276,23 @@ const InsightsPage: React.FC = () => {
     );
 };
 
-const OverviewBlock: React.FC<{ 
-    title: string; 
-    items: string[];
-    icon: React.ReactNode;
-    bgColor: string;
-    borderColor: string;
-    className?: string;
-}> = ({ title, items, icon, bgColor, borderColor, className = "" }) => (
-    <div className={`${bgColor} border ${borderColor} rounded-lg p-4 ${className}`}>
-        <div className="flex items-center mb-3">
-            {icon}
-            <h3 className="font-semibold text-gray-800 ml-2">{title}</h3>
-        </div>
-        <ul className="space-y-2">
-            {items.map((item, i) => (
-                <li key={i} className="text-gray-700 text-sm flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                    <span>{item}</span>
-                </li>
-            ))}
-        </ul>
-    </div>
-);
-
-const ScoreBar: React.FC<{ label: string; score: number; color: string }> = ({ 
-    label, 
-    score, 
-    color 
-}) => (
-    <div>
-        <div className="flex justify-between text-sm mb-1">
-            <span className="text-gray-600">{label}</span>
-            <span className="font-medium text-gray-900">{score}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-                className={`h-2 rounded-full ${color}`} 
-                style={{ width: `${score}%` }}
-            ></div>
-        </div>
-    </div>
-);
-
 const QuickActionButton: React.FC<{ 
     title: string; 
     description: string; 
     action: () => void;
-}> = ({ title, description, action }) => (
+    icon: React.ReactNode;
+}> = ({ title, description, action, icon }) => (
     <button
         onClick={action}
-        className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group"
+        className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group flex items-center gap-3"
     >
-        <div className="font-medium text-gray-900 group-hover:text-blue-600">{title}</div>
-        <div className="text-sm text-gray-500">{description}</div>
+        <div className="text-gray-400 group-hover:text-blue-500 transition-colors">
+            {icon}
+        </div>
+        <div className="flex-1">
+            <div className="font-medium text-gray-900 group-hover:text-blue-600">{title}</div>
+            <div className="text-sm text-gray-500">{description}</div>
+        </div>
     </button>
 );
 

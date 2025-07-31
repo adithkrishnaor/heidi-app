@@ -457,7 +457,7 @@ const CreateEditTemplateContent: React.FC = () => {
   );
 };
 
-// Loading component for Suspense
+// Loading component 
 const LoadingSpinner = () => (
   <div className="min-h-screen bg-gray-50 flex items-center justify-center">
     <div className="text-center">
