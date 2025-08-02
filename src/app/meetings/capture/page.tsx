@@ -70,11 +70,7 @@ interface HeidiFeedback {
   suggestions: string[];
 }
 
-interface LiveCaptureProps {
-  onExit?: () => void;
-}
-
-const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
+const LiveCaptureComponent: React.FC = () => {
   const router = useRouter();
   const [isRecording, setIsRecording] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -186,9 +182,6 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
     } else {
       // Route to home page
       router.push('/home');
-      if (onExit) {
-        onExit();
-      }
     }
   };
 
@@ -197,9 +190,6 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
     setShowExitConfirmation(false);
     // Route to home page
     router.push('/home');
-    if (onExit) {
-      onExit();
-    }
   };
 
   const getInsightIcon = (type: KeyInsight["type"]) => {
