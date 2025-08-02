@@ -103,13 +103,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate }) => {
       ],
     },
     {
-      id: "ai",
+      id: "heidiCore",
       label: "Heidi Core",
       icon: <MessageSquare className="w-4 h-4" />,
       customIcon: "/icons/heidi_core.png",
       children: [
-        { id: "ai", label: "New Chat", icon: null },
-        { id: "ai/history", label: "Thread History", icon: null },
+        { id: "heidiCore", label: "New Chat", icon: null },
+        { id: "heidiCore/history", label: "Thread History", icon: null },
       ],
     },
     {
