@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { 
   Play, 
   Video, 
@@ -13,13 +13,8 @@ import {
   ChevronDown,
   ChevronRight,
   ExternalLink,
-  MessageSquare,
   CheckSquare,
   FileText,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
   Settings,
   MoreHorizontal,
   Star,
@@ -351,7 +346,7 @@ const MeetingsPage: React.FC = () => {
               className="flex items-center justify-between w-full text-left"
             >
               <h3 className="text-md font-semibold text-gray-900 flex items-center space-x-2">
-                <span>🤖 Heidi's Impression</span>
+                <span>🤖 Heidi&apos;s Impression</span>
                 <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs font-medium">
                   {details.heidisImpression.score}/100
                 </span>

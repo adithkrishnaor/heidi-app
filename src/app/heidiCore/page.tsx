@@ -198,19 +198,6 @@ const HeidiCorePage: React.FC = () => {
     setShowThreads(false);
   };
 
-  const getThreadIcon = (type: string) => {
-    switch (type) {
-      case "meeting":
-        return <Users className="w-4 h-4 text-blue-500" />;
-      case "insight":
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case "contact":
-        return <User className="w-4 h-4 text-purple-500" />;
-      default:
-        return <FileText className="w-4 h-4 text-gray-500" />;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <Sidebar currentPage={currentPage} onNavigate={handleNavigation} />

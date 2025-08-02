@@ -16,12 +16,10 @@ import {
   Square,
   Maximize,
   Minimize,
-
   Monitor,
   MonitorOff,
   Copy,
   Star,
-
   Activity,
   Zap,
   Eye,
@@ -505,7 +503,7 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
             {showHeidiFeedback && (
               <div className="h-full flex flex-col">
                 <div className="p-4 border-b border-gray-200">
-                  <h3 className="font-semibold text-gray-900 mb-2">🤖 Heidi's Live Feedback</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">🤖 Heidi&apos;s Live Feedback</h3>
                   <div className="flex items-center space-x-2">
                     <div className="text-2xl font-bold text-blue-600">{heidiFeedback.overallScore}</div>
                     <div className="text-sm text-gray-500">Overall Score</div>
