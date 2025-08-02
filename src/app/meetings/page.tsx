@@ -84,7 +84,6 @@ const MeetingsPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("meetings");
   const [searchQuery, setSearchQuery] = useState("");
   const [summaryType, setSummaryType] = useState<"short" | "standard" | "detailed">("standard");
-  const [showDeepAnalysis, setShowDeepAnalysis] = useState(false);
   const [expandedSections, setExpandedSections] = useState<{[key: string]: boolean}>({
     heidi: true,
     highlights: true,

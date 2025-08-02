@@ -86,7 +86,7 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
   const [showInsights, setShowInsights] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [meetingDuration, setMeetingDuration] = useState(0);
-  const [connectionQuality, setConnectionQuality] = useState<"excellent" | "good" | "fair" | "poor">("excellent");
+  const [connectionQuality] = useState<"excellent" | "good" | "fair" | "poor">("excellent");
   const [chatMessage, setChatMessage] = useState("");
   const [showHeidiFeedback, setShowHeidiFeedback] = useState(true);
 
@@ -103,7 +103,7 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
     { id: "4", name: "Lisa Wang", isHost: false, isMuted: false, isCameraOn: true, isOnline: true },
   ]);
 
-  const [liveTranscript, setLiveTranscript] = useState<LiveTranscript[]>([
+  const [liveTranscript] = useState<LiveTranscript[]>([
     { id: "1", timestamp: "14:30:15", speaker: "Sarah", text: "Let's start by reviewing the Q4 performance metrics.", confidence: 0.95 },
     { id: "2", timestamp: "14:30:28", speaker: "Mike", text: "The numbers look really promising, especially in the enterprise segment.", confidence: 0.92 },
     { id: "3", timestamp: "14:30:45", speaker: "You", text: "Yes, we exceeded our targets by 15%. Should we dive into the details?", confidence: 0.98 },
@@ -307,7 +307,7 @@ const LiveCaptureComponent: React.FC<LiveCaptureProps> = ({ onExit }) => {
               </div>
 
               {/* Other Participants */}
-              {participants.slice(1, 3).map((participant, idx) => (
+              {participants.slice(1, 3).map((participant) => (
                 <div key={participant.id} className="bg-gray-800 rounded-xl relative overflow-hidden">
                   <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                     <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
